@@ -1,9 +1,18 @@
-/* Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+.logo a {
+  color: black;              /* Sets text to black */
+  text-decoration: none;     /* Removes underline */
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo a:hover {
+  color: white;              /* Changes to white on hover */
+  background-color: black;   /* Optional: black background on hover */
+  padding: 4px 8px;          /* Optional: slight spacing */
+  border-radius: 4px;        /* Optional: rounded look */
+  transition: 0.3s ease;
+}
+
   
   /* General body styling */
   body {

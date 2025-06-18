@@ -11,7 +11,10 @@
 
   <!-- Navigation Bar -->
   <nav class="navbar">
-    <div class="logo">FelTon</div>
+    <div class="logo">
+      <a href="index.html">FelTon</a>
+    </div>
+    
     <div class="menu-toggle" id="menu-toggle">&#9776;</div>
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html">Home</a></li>
@@ -23,38 +26,38 @@
   </nav>
 
   <!-- Contact Form Section -->
-  <section class="contact" id="contact">
-    <h2>Get in Touch</h2>
-    <p>Fill out the form below to request a quote or ask us anything!</p>
+      <!-- Contact Section -->
+<section class="contact" id="contact">
+  <h2>Get in Touch</h2>
+  <p>Fill out the form below to request a quote or ask us anything!</p>
 
-    <form action="https://formsubmit.co/info@feltonmovers.co.ke" method="POST" class="contact-form">
-      <!-- Hidden Settings -->
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="https://www.feltonmovers.co.ke/thankyou.html">
-      <input type="hidden" name="_template" value="table">
+  <form action="https://formsubmit.co/info@feltonmovers.co.ke" method="POST" class="contact-form">
+    <!-- Hidden Config -->
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" value="https://www.feltonmovers.co.ke/thankyou.html">
+    <input type="hidden" name="_template" value="table">
 
-      <!-- User Inputs -->
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="email" name="email" placeholder="Your Email" required>
-      <input type="tel" name="phone" placeholder="Your Phone Number" required>
-      <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+    <!-- User Inputs -->
+    <input type="text" name="name" placeholder="Your Name" required />
+    <input type="email" name="email" placeholder="Your Email" required />
+    <input type="tel" name="phone" placeholder="Your Phone Number" required />
+    <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
 
-      <button type="submit" class="btn contact-btn">Send Message</button>
-    </form>
-  </section>
+    <button type="submit" class="btn contact-btn">Send Message</button>
+  </form>
+</section>
 
-  <!-- Google Map Embed -->
-    <!-- Google Map Embed -->
+<!-- Map Section -->
 <section class="map-section">
   <h2>Our Location</h2>
   <div class="map-container">
     <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.261312734958!2d36.7435647!3d-1.3058671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1a4e2ee830a9%3A0x632783e2e9785459!2sNgong%20Rd%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1718736769037!5m2!1sen!2ske"
-      width="100%" height="400" style="border:0;" allowfullscreen=""
-      loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.20810754326!2d36.745555!3d-1.30392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1a4e2ee830a9%3A0x632783e2e9785459!2sNgong%20Rd%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1718725063297!5m2!1sen!2ske"
+      width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
   </div>
 </section>
+
 
   <script>
     const toggle = document.getElementById('menu-toggle');
