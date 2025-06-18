@@ -112,33 +112,34 @@
     background-color: #e65c00;
   }
   /* Why Choose Us Section */
-  @media (max-width: 768px) {
-  .why-choose, .why-choose .container, .why-choose h2 {
-    width: 100%;
-    padding: 0 20px;
-    text-align: center;
-  }
+  /* Fix for mobile cutoff */
+.why-choose-us {
+  padding: 40px 20px;
+  overflow: visible; /* Ensures content isn't clipped */
+}
 
-  .why-choose {
-    margin-top: 40px;
+@media (max-width: 768px) {
+  .why-choose-us {
+    padding-bottom: 80px; /* Extra space for mobile */
   }
-
-  .why-choose .feature {
+  
+  .features {
     flex-direction: column;
     align-items: center;
   }
-
-  .why-choose h2 {
-    font-size: 1.8rem;
-    line-height: 1.3;
-  }
-
-  .why-choose p {
-    font-size: 1rem;
+  
+  .feature {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
   }
 }
-.why-choose {
-  padding-bottom: 80px; /* adjust based on button height */
+.why-choose-us {
+  position: relative;
+  z-index: 1; /* Higher than any overlapping elements */
+}
+body {
+  overflow-x: hidden; /* Prevents horizontal scrolling issues */
 }
 
   
