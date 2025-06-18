@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FelTon | Blog</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/blog.css" />
+</head>
+<body>
+
+
+  <nav class="navbar">
+    <div class="logo">FelTon</div>
+    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="blog.html" target="_blank">Blog</a></li>
+      <li><a href="contact.html" target="_blank">Contact</a></li>
+      <li><a href="gallery.html" target="_blank">Gallery</a></li>
+      <li><a href="quote.html" target="_blank">Quote</a></li>
+    </ul>
+  </nav>
+
+  
+
+  <section class="blog">
+    <h2>Moving & Cleaning Tips</h2>
+    <div class="blog-grid">
+
+      <div class="blog-post">
+        <h3>5 Things to Do Before Moving</h3>
+        <p>Here’s a checklist to make your move stress-free and organized...</p>
+        <a href="#" onclick="toggleText(this)">Read More</a>
+        <div class="hidden-text" style="display:none;">
+          <p>
+            ✅ Create a moving inventory<br>
+            ✅ Start packing early<br>
+            ✅ Label your boxes clearly<br>
+            ✅ Notify your landlord in advance<br>
+            ✅ Schedule FelTon for a seamless move 😉
+          </p>
+        </div>
+      </div>
+
+      <div class="blog-post">
+        <h3>Why Deep Cleaning is a Must</h3>
+        <p>Most people don’t realize how important it is after renovations...</p>
+        <a href="#" onclick="toggleText(this)">Read More</a>
+        <div class="hidden-text" style="display:none;">
+          <p>
+            🧽 Deep cleaning gets rid of construction dust<br>
+            🦠 Eliminates hidden bacteria and allergens<br>
+            🧴 Prepares the home for safe move-in<br>
+            🚚 FelTon’s post-renovation cleaning covers it all!
+          </p>
+        </div>
+      </div>
+
+      <div class="blog-post">
+        <h3>How to Choose a Moving Company</h3>
+        <p>We break down what to look for when hiring a reliable mover...</p>
+        <a href="#" onclick="toggleText(this)">Read More</a>
+        <div class="hidden-text" style="display:none;">
+          <p>
+            ✅ Look for transparent pricing<br>
+            ✅ Ensure they have a physical office<br>
+            ✅ Read reviews and ask for references<br>
+            ✅ Confirm their availability and support<br>
+            ✅ Or just choose FelTon — we check all the boxes 💯
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    function toggleText(el) {
+      const hidden = el.nextElementSibling;
+      if (hidden.style.display === "none" || hidden.style.display === "") {
+        hidden.style.display = "block";
+        el.innerText = "Read Less";
+      } else {
+        hidden.style.display = "none";
+        el.innerText = "Read More";
+      }
+    }
+  </script>
+  <a
+  href="https://wa.me/254111300121"
+  class="whatsapp-float"
+  target="_blank"
+  title="Chat with us on WhatsApp"
+>
+  💬 Chat with us
+</a>
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const links = document.getElementById('nav-links');
+
+  toggle.addEventListener('click', () => {
+    links.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

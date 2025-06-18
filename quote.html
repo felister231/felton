@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Get Your Quote - FelTon Movers</title>
+  <link rel="stylesheet" href="css/quote.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">FelTon</div>
+    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="blog.html" target="_blank">Blog</a></li>
+      <li><a href="contact.html" target="_blank">Contact</a></li>
+      <li><a href="gallery.html" target="_blank">Gallery</a></li>
+      <li><a href="quote.html" target="_blank">Quote</a></li>
+    </ul>
+  </nav>
+  
+
+  <header>
+    <h1>FelTon Movers - Moving Packages</h1>
+  </header>
+
+  <section class="packages">
+    <h2>Choose Your Package</h2>
+    <div class="package">
+      <h3>Bedsitter</h3>
+      <p>Includes packing, moving, and basic cleaning.</p>
+      <span>From KES 5,000</span>
+    </div>
+    <div class="package">
+      <h3>1 Bedroom</h3>
+      <p>Includes packing, moving, cleaning, and light assembly.</p>
+      <span>From KES 10,000</span>
+    </div>
+    <div class="package">
+      <h3>2 Bedroom</h3>
+      <p>Includes everything + extra crew + fragile handling.</p>
+      <span>From KES 15,000</span>
+    </div>
+    <div class="package">
+      <h3>Mansion</h3>
+      <p>VIP Full-service move — full packing, disassembly, cleaning, large truck service.</p>
+      <span>From KES 20,000</span>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 FelTon Movers. All rights reserved.</p>
+  </footer>
+  <section class="quote-form">
+    <h2>Send This Quote to Your Phone</h2>
+    <form action="https://formspree.io/f/xanjjyqw" method="POST">
+      <label for="package">Choose Package:</label>
+      <select name="package" id="package" required>
+        <option value="" disabled selected>Select a package</option>
+        <option value="Bedsitter">Bedsitter - From KES 5,000</option>
+        <option value="1 Bedroom">1 Bedroom - From KES 10,000</option>
+        <option value="2 Bedroom">2 Bedroom - From KES 15,000</option>
+        <option value="Mansion">Mansion - From KES 20,000</option>
+      </select>
+  
+      <label for="phone">Your Phone Number:</label>
+      <input type="tel" id="phone" name="phone" placeholder="e.g. 07XXXXXXXX" required pattern="[0-9]{10}">
+  
+      <button type="submit">Send Quote</button>
+    </form>
+  </section>
+  <section class="quote-calculator">
+    <h2>Instant Quote Calculator</h2>
+    <form id="quoteForm">
+      <label for="houseType">House Type:</label>
+      <select id="houseType" required>
+        <option value="">Select...</option>
+        <option value="bedsitter">Bedsitter</option>
+        <option value="1br">1 Bedroom</option>
+        <option value="2br">2 Bedroom</option>
+        <option value="mansion">Mansion</option>
+      </select>
+  
+      <label for="distance">Distance (in km):</label>
+      <input type="number" id="distance" placeholder="e.g. 10" required>
+  
+      <label>
+        <input type="checkbox" id="packing"> Include Packing
+      </label>
+  
+      <label>
+        <input type="checkbox" id="cleaning"> Include Cleaning
+      </label>
+  
+      <button type="submit">Get Quote 💰</button>
+    </form>
+  
+    <div id="quoteResult" class="quote-result"></div>
+  </section>
+  <script src="js/quote.js"></script>
+  
+  <script>
+    const toggle = document.getElementById('menu-toggle');
+    const links = document.getElementById('nav-links');
+  
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('active');
+    });
+  </script>
+
+</body>
+</html>

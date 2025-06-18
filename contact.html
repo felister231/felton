@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FelTon | Contact Us</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/contact.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo">FelTon</div>
+    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="blog.html" target="_blank">Blog</a></li>
+      <li><a href="contact.html" target="_blank">Contact</a></li>
+      <li><a href="gallery.html" target="_blank">Gallery</a></li>
+      <li><a href="quote.html" target="_blank">Quote</a></li>
+    </ul>
+  </nav>
+
+  <!-- Contact Form Section -->
+  <section class="contact">
+    <h2>Get in Touch</h2>
+    <p>Fill out the form below to request a quote or ask us anything!</p>
+    
+    <form action="https://formspree.io/f/xanjjyqw" method="POST" class="contact-form">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <input type="tel" name="phone" placeholder="Your Phone Number" required />
+      <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit">Send Message</button>
+      <p id="form-status"></p>
+    </form>
+  </section>
+
+  <!-- Google Map Embed -->
+  <section class="map-section">
+    <h2>Our Location</h2>
+    <div class="map-container">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.20810754326!2d36.745555!3d-1.30392
