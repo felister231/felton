@@ -1,62 +1,59 @@
-document.getElementById("quoteForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-  
-    const houseType = document.getElementById("houseType").value;
-    const distance = parseFloat(document.getElementById("distance").value);
-    const packing = document.getElementById("packing").checked;
-    const cleaning = document.getElementById("cleaning").checked;
-  
-    let basePrice = 0;
-  
-    switch (houseType) {
-      case "bedsitter": basePrice = 1000; break;
-      case "1br": basePrice = 2000; break;
-      case "2br": basePrice = 3000; break;
-      case "mansion": basePrice = 5000; break;
-      default: basePrice = 0;
+let autocompleteFrom, autocompleteTo;
+
+function initAutocomplete() {
+  autocompleteFrom = new google.maps.places.Autocomplete(document.getElementById("from"));
+  autocompleteTo = new google.maps.places.Autocomplete(document.getElementById("to"));
+}
+
+function calculateQuote() {
+  const origin = document.getElementById("from").value;
+  const destination = document.getElementById("to").value;
+  const houseType = document.getElementById("house-type").value;
+
+  if (!origin || !destination || !houseType) {
+    alert("Please fill in all fields before calculating.");
+    return;
+  }
+
+  let ratePerKm;
+  switch (houseType) {
+    case "Bedsitter":
+      ratePerKm = 300;
+      break;
+    case "1 Bedroom":
+      ratePerKm = 500;
+      break;
+    case "2 Bedroom":
+      ratePerKm = 700;
+      break;
+    case "3 Bedroom":
+      ratePerKm = 1000;
+      break;
+    case "More than 3 Bedrooms":
+      ratePerKm = 1200;
+      break;
+    default:
+      ratePerKm = 500;
+  }
+
+  const service = new google.maps.DistanceMatrixService();
+  service.getDistanceMatrix(
+    {
+      origins: [origin],
+      destinations: [destination],
+      travelMode: 'DRIVING',
+      unitSystem: google.maps.UnitSystem.METRIC,
+    },
+    function(response, status) {
+      if (status !== 'OK') {
+        alert('Error getting distance: ' + status);
+      } else {
+        const distanceInKm = response.rows[0].elements[0].distance.value / 1000;
+        const price = Math.round(distanceInKm * ratePerKm);
+        const priceDisplay = document.getElementById("priceDisplay");
+        priceDisplay.style.display = "block";
+        priceDisplay.textContent = `Estimated Moving Cost: KSh ${price.toLocaleString()}`;
+      }
     }
-  
-    const distanceCharge = distance * 50;
-    const packingCharge = packing ? 500 : 0;
-    const cleaningCharge = cleaning ? 700 : 0;
-  
-    const total = basePrice + distanceCharge + packingCharge + cleaningCharge;
-  
-    document.getElementById("quoteResult").innerText = `Estimated Cost: KES ${total.toLocaleString()}`;
-  });
-  document.getElementById("quoteForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-  
-    const houseType = document.getElementById("houseType").value;
-    const distance = parseFloat(document.getElementById("distance").value);
-    const packing = document.getElementById("packing").checked;
-    const cleaning = document.getElementById("cleaning").checked;
-  
-    let basePrice = 0;
-  
-    switch (houseType) {
-      case "bedsitter": basePrice = 1000; break;
-      case "1br": basePrice = 2000; break;
-      case "2br": basePrice = 3000; break;
-      case "mansion": basePrice = 5000; break;
-      default: basePrice = 0;
-    }
-  
-    const distanceCharge = distance * 50;
-    const packingCharge = packing ? 500 : 0;
-    const cleaningCharge = cleaning ? 700 : 0;
-    const total = basePrice + distanceCharge + packingCharge + cleaningCharge;
-  
-    const quoteMessage = `Hello FelTon Movers,%0AI'm requesting a quote for:%0A- House: ${houseType.toUpperCase()}%0A- Distance: ${distance} km%0A- Packing: ${packing ? "Yes" : "No"}%0A- Cleaning: ${cleaning ? "Yes" : "No"}%0A- Estimated Cost: KES ${total.toLocaleString()}%0AThank you!`;
-  
-    const phone = "254712345678"; // Replace with your real number
-  
-    const whatsappLink = `https://wa.me/${phone}?text=${quoteMessage}`;
-  
-    document.getElementById("quoteResult").innerHTML = `
-      <p>Estimated Cost: <strong>KES ${total.toLocaleString()}</strong></p>
-      <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">Send via WhatsApp 📲</a>
-    `;
-  });
-  
-  
+  );
+}

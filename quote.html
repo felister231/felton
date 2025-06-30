@@ -3,125 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FelTon | Moving Packages</title>
-  <link rel="stylesheet" href="css/quote.css" />
+  <title>Get a Quote | FelTon Movers</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/quote.css"/>
+
+  <!-- Google Maps JS API -->
+  <script 
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnJZV1rz95OpKWSEl9KKCMuhOE71S4zOw&libraries=places&callback=initAutocomplete" 
+    async defer>
+  </script>
 </head>
 <body>
+  <section class="quote-page">
+    <div class="quote-container">
+      <h1>Get Your Free Moving Quote</h1>
+      <p>Fill in the form below and we’ll calculate your estimated price instantly.</p>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="logo"><a href="index.html" style="color:white; text-decoration:none;">FelTon</a></div>
-    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="blog.html" target="_blank">Blog</a></li>
-      <li><a href="contact.html" target="_blank">Contact</a></li>
-      <li><a href="gallery.html" target="_blank">Gallery</a></li>
-      <li><a href="quote.html" target="_blank">Quote</a></li>
-    </ul>
-  </nav>
+      <form id="quoteForm">
+        <input type="hidden" name="_honey" style="display:none">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://feltonmovers.co.ke/thank-you.html">
 
-  <header>
-    <h1>FelTon Movers - Moving Packages</h1>
-  </header>
-  <section class="trust-signals">
-    <div class="trust-item">
-      <h3>💪 500+ Moves Completed</h3>
-      <p>Across Nairobi and beyond, FelTon Movers has helped hundreds of families relocate smoothly.</p>
-    </div>
-    <div class="trust-item">
-      <h3>👷 25+ Professional Team Members</h3>
-      <p>Our trained and uniformed crew is always ready to make your move stress-free.</p>
-    </div>
-    <div class="trust-item">
-      <h3>📦 10+ Years Combined Experience</h3>
-      <p>With a dedicated team, we bring expertise and efficiency to every move.</p>
+        <div class="form-group">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" name="Full Name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="Phone Number" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="Email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="from">Moving From (Location)</label>
+          <input type="text" id="from" name="Moving From" required placeholder="Enter starting location">
+        </div>
+
+        <div class="form-group">
+          <label for="to">Moving To (Location)</label>
+          <input type="text" id="to" name="Moving To" required placeholder="Enter destination">
+        </div>
+
+        <div class="form-group">
+          <label for="date">Preferred Move Date</label>
+          <input type="date" id="date" name="Move Date">
+        </div>
+
+        <div class="form-group">
+          <label for="house-type">House Size</label>
+          <select id="house-type" name="House Type" required>
+            <option value="" disabled selected>Select house size</option>
+            <option value="Bedsitter">Bedsitter</option>
+            <option value="1 Bedroom">1 Bedroom</option>
+            <option value="2 Bedroom">2 Bedroom</option>
+            <option value="3 Bedroom">3 Bedroom</option>
+            <option value="More than 3 Bedrooms">More than 3 Bedrooms</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="instructions">Special Instructions</label>
+          <textarea id="instructions" name="Special Instructions" rows="4"></textarea>
+        </div>
+
+        <button type="button" class="calc-btn" onclick="calculateQuote()">Calculate Price</button>
+        <div id="priceDisplay" class="price-output" style="display: none;"></div>
+
+        <button type="submit" class="submit-btn">Send Request</button>
+      </form>
+
+      <div class="quote-contact-backup">
+        <p><strong>Need help?</strong> Reach us directly:</p>
+        <p>📞 0111300121 &nbsp;|&nbsp; 📧 info@feltonmovers.co.ke</p>
+      </div>
     </div>
   </section>
-  
 
-  <section class="packages">
-    <h2>Choose Your Package</h2>
-    <div class="package">
-      <h3>Bedsitter</h3>
-      <p>Includes packing, moving, and basic cleaning.</p>
-      <span>From KES 5,000</span>
-    </div>
-    <div class="package">
-      <h3>1 Bedroom</h3>
-      <p>Includes packing, moving, cleaning, and light assembly.</p>
-      <span>From KES 10,000</span>
-    </div>
-    <div class="package">
-      <h3>2 Bedroom</h3>
-      <p>Includes everything + extra crew + fragile handling.</p>
-      <span>From KES 15,000</span>
-    </div>
-    <div class="package">
-      <h3>Mansion</h3>
-      <p>VIP Full-service move — full packing, disassembly, cleaning, large truck service.</p>
-      <span>From KES 20,000</span>
-    </div>
-  </section>
-
-  <section class="quote-form">
-    <h2>Send This Quote to Your Phone</h2>
-    <form action="https://formsubmit.co/info@feltonmovers.co.ke" method="POST">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="https://www.feltonmovers.co.ke/thankyou.html">
-      <input type="hidden" name="_template" value="table">
-
-      <label for="package">Choose Package:</label>
-      <select name="package" id="package" required>
-        <option value="" disabled selected>Select a package</option>
-        <option value="Bedsitter">Bedsitter - From KES 5,000</option>
-        <option value="1 Bedroom">1 Bedroom - From KES 10,000</option>
-        <option value="2 Bedroom">2 Bedroom - From KES 15,000</option>
-        <option value="Mansion">Mansion - From KES 20,000</option>
-      </select>
-
-      <label for="phone">Your Phone Number:</label>
-      <input type="tel" id="phone" name="phone" placeholder="e.g. 07XXXXXXXX" required pattern="[0-9]{10}">
-
-      <button type="submit">Send Quote</button>
-    </form>
-  </section>
-
-  <section class="quote-calculator">
-    <h2>Instant Quote Calculator</h2>
-    <form id="quoteForm">
-      <label for="houseType">House Type:</label>
-      <select id="houseType" required>
-        <option value="">Select...</option>
-        <option value="bedsitter">Bedsitter</option>
-        <option value="1br">1 Bedroom</option>
-        <option value="2br">2 Bedroom</option>
-        <option value="mansion">Mansion</option>
-      </select>
-
-      <label for="distance">Distance (in km):</label>
-      <input type="number" id="distance" placeholder="e.g. 10" required>
-
-      <label><input type="checkbox" id="packing"> Include Packing</label>
-      <label><input type="checkbox" id="cleaning"> Include Cleaning</label>
-
-      <button type="submit">Get Quote 💰</button>
-    </form>
-    <div id="quoteResult" class="quote-result"></div>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 FelTon Movers. All rights reserved.</p>
-  </footer>
-
-  <script src="js/quote.js"></script>
-  <script>
-    const toggle = document.getElementById('menu-toggle');
-    const links = document.getElementById('nav-links');
-    toggle.addEventListener('click', () => {
-      links.classList.toggle('active');
-    });
-  </script>
-
+  <script src="quote.js" defer></script>
 </body>
 </html>
