@@ -1,16 +1,22 @@
-let autocompleteFrom, autocompleteTo;
-
 function initAutocomplete() {
-  autocompleteFrom = new google.maps.places.Autocomplete(document.getElementById("from"));
-  autocompleteTo = new google.maps.places.Autocomplete(document.getElementById("to"));
+  const inputFrom = document.getElementById("from");
+  const inputTo = document.getElementById("to");
+
+  if (inputFrom && inputTo) {
+    new google.maps.places.Autocomplete(inputFrom);
+    new google.maps.places.Autocomplete(inputTo);
+    console.log("✅ Autocomplete initialized");
+  } else {
+    console.error("❌ Could not find location inputs");
+  }
 }
 
 function calculateQuote() {
   const origin = document.getElementById("from").value;
   const destination = document.getElementById("to").value;
   const houseType = document.getElementById("house-type").value;
-  console.log("Quote button clicked");
 
+  console.log("🚛 Quote button clicked");
 
   if (!origin || !destination || !houseType) {
     alert("Please fill in all fields before calculating.");
@@ -46,15 +52,25 @@ function calculateQuote() {
       travelMode: 'DRIVING',
       unitSystem: google.maps.UnitSystem.METRIC,
     },
-    function(response, status) {
+    function (response, status) {
+      console.log("📦 DistanceMatrix status:", status);
+      console.log("📦 DistanceMatrix response:", response);
+
       if (status !== 'OK') {
         alert('Error getting distance: ' + status);
       } else {
-        const distanceInKm = response.rows[0].elements[0].distance.value / 1000;
-        const price = Math.round(distanceInKm * ratePerKm);
-        const priceDisplay = document.getElementById("priceDisplay");
-        priceDisplay.style.display = "block";
-        priceDisplay.textContent = `Estimated Moving Cost: KSh ${price.toLocaleString()}`;
+        const distanceElement = response.rows[0].elements[0];
+
+        if (distanceElement.status === "OK") {
+          const distanceInKm = distanceElement.distance.value / 1000;
+          const price = Math.round(distanceInKm * ratePerKm);
+
+          const priceDisplay = document.getElementById("priceDisplay");
+          priceDisplay.style.display = "block";
+          priceDisplay.textContent = `Estimated Moving Cost: KSh ${price.toLocaleString()}`;
+        } else {
+          alert("Distance not available. Please choose both locations from the suggested list.");
+        }
       }
     }
   );
