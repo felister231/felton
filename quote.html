@@ -4,13 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Get a Quote | FelTon Movers</title>
-
-
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="css/quote.css"/>
-
-  <!-- Google Maps JS API -->
-   
+  <link rel="stylesheet" href="css/quote.css" />
 </head>
 <body>
   <section class="quote-page">
@@ -19,45 +13,35 @@
       <p>Fill in the form below and we’ll calculate your estimated price instantly.</p>
 
       <form id="quoteForm">
-        <input type="hidden" name="_honey" style="display:none">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://feltonmovers.co.ke/thank-you.html">
-       
-
         <div class="form-group">
           <label for="fullname">Full Name</label>
-          <input type="text" id="fullname" name="Full Name" required>
+          <input type="text" id="fullname" required>
         </div>
 
         <div class="form-group">
           <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="Phone Number" required>
+          <input type="tel" id="phone" required>
         </div>
 
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input type="email" id="email" name="Email" required>
+          <input type="email" id="email" required>
         </div>
 
         <div class="form-group">
-          <label for="from">Moving From (Location)</label>
-          <input type="text" id="from" name="Moving From" required placeholder="Enter starting location">
+          <label for="from">Moving From</label>
+          <input type="text" id="from" placeholder="Start location" required>
         </div>
 
         <div class="form-group">
-          <label for="to">Moving To (Location)</label>
-          <input type="text" id="to" name="Moving To" required placeholder="Enter destination">
-        </div>
-
-        <div class="form-group">
-          <label for="date">Preferred Move Date</label>
-          <input type="date" id="date" name="Move Date">
+          <label for="to">Moving To</label>
+          <input type="text" id="to" placeholder="Destination" required>
         </div>
 
         <div class="form-group">
           <label for="house-type">House Size</label>
-          <select id="house-type" name="House Type" required>
-            <option value="" disabled selected>Select house size</option>
+          <select id="house-type" required>
+            <option value="">Select house size</option>
             <option value="Bedsitter">Bedsitter</option>
             <option value="1 Bedroom">1 Bedroom</option>
             <option value="2 Bedroom">2 Bedroom</option>
@@ -66,32 +50,16 @@
           </select>
         </div>
 
-        <div class="form-group">
-          <label for="instructions">Special Instructions</label>
-          <textarea id="instructions" name="Special Instructions" rows="4"></textarea>
-        </div>
-
-        <button type="button" class="calc-btn" onclick="calculateQuote()">Calculate Price</button>
-        <div id="priceDisplay" class="price-output" style="display: none;"></div>
-
-        <button type="submit" class="submit-btn">Send Request</button>
+        <button type="button" onclick="calculateQuote()">Calculate Quote</button>
+        <div id="priceDisplay" class="price-output" style="display:none;"></div>
       </form>
-
-      <div class="quote-contact-backup">
-        <p><strong>Need help?</strong> Reach us directly:</p>
-        <p>📞 0111300121 &nbsp;|&nbsp; 📧 info@feltonmovers.co.ke</p>
-      </div>
     </div>
   </section>
-  <!-- Load your custom JS first -->
-<script src="quote.js" defer></script>
 
-<!-- Load Google Maps LAST with callback -->
-<script 
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnJZV1rz95OpKWSEl9KKCMuhOE71S4zOw&libraries=places&callback=initAutocomplete" 
-  async defer>
-</script>
-
-
+  <script src="quote.js" defer></script>
+  <script 
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnJZV1rz95OpKWSEl9KKCMuhOE71S4zOw&libraries=places&callback=initAutocomplete" 
+    async defer>
+  </script>
 </body>
 </html>

@@ -1,183 +1,56 @@
-* 
-body {
-  background: linear-gradient(to right, #fefefe, #f2f2f2);
-}
-{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-@media screen and (max-width: 768px) {
-  .quote-page {
-    padding: 20px 15px;
-    margin: 20px 10px;
-  }
-
-  .quote-container h1 {
-    font-size: 1.4rem;
-  }
-  .quote-page {
-    transition: all 0.3s ease;
-  }
-  
-  .quote-page:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  }
-  
-
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    font-size: 1rem;
-    padding: 10px;
-  }
-  button {
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  button:hover {
-    transform: scale(1.02);
-  }
-  input#from, input#to {
-    background-image: url('https://img.icons8.com/ios/24/marker.png');
-    background-position: 10px center;
-    background-repeat: no-repeat;
-    padding-left: 40px;
-  }
-  
-  .calc-btn,
-  .submit-btn {
-    padding: 12px;
-    font-size: 1rem;
-  }
-
-  #priceDisplay {
-    font-size: 1rem;
-    padding: 12px;
-  }
-}
-
-
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #FF914D;
+  background: #f9f9f9;
   color: #333;
-  line-height: 1.6;
+  margin: 0;
+  padding: 0;
 }
 
 .quote-page {
-  padding: 40px 20px;
-  max-width: 700px;
-  margin: 60px auto;
+  max-width: 600px;
+  margin: 50px auto;
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
 .quote-container h1 {
-  font-size: 2rem;
   text-align: center;
-  margin-bottom: 10px;
-}
-
-.quote-container p {
-  text-align: center;
-  color: #777;
-  margin-bottom: 30px;
+  color: #FF914D;
 }
 
 .form-group {
   margin-bottom: 20px;
 }
 
-label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="date"],
-select,
-textarea {
+input, select, button {
   width: 100%;
-  padding: 12px 14px;
+  padding: 12px;
+  font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 1rem;
-  background-color: #fff;
+  border-radius: 8px;
+  margin-top: 6px;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: #FF914D;
-}
-
-.calc-btn,
-.submit-btn {
-  display: block;
-  width: 100%;
-  padding: 14px;
+button {
+  background: #FF914D;
+  color: white;
   border: none;
-  font-size: 1rem;
-  border-radius: 10px;
-  margin-top: 10px;
   cursor: pointer;
   font-weight: bold;
-  letter-spacing: 0.5px;
 }
 
-.calc-btn {
-  background-color: #FF914D;
-  color: #fff;
-}
-
-.calc-btn:hover {
-  background-color: #e27835;
-}
-
-.submit-btn {
-  background-color: #333;
-  color: #fff;
-}
-
-.submit-btn:hover {
-  background-color: #111;
+button:hover {
+  background: #e87a30;
 }
 
 .price-output {
-  background-color: #e9f6ff;
+  margin-top: 20px;
+  padding: 15px;
+  background: #dff5ff;
   border-left: 5px solid #00AEEF;
-  padding: 15px 20px;
-  margin-top: 15px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: bold;
   color: #007bb8;
   border-radius: 8px;
-  display: none;
-}
-
-.quote-contact-backup {
-  text-align: center;
-  font-size: 0.95rem;
-  margin-top: 30px;
-  color: #666;
-}
-
-.quote-contact-backup strong {
-  color: #000;
-}
-
-@media screen and (max-width: 600px) {
-  .quote-page {
-    padding: 30px 15px;
-  }
-
-  .quote-container h1 {
-    font-size: 1.6rem;
-  }
 }
