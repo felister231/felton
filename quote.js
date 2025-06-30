@@ -9,6 +9,8 @@ function calculateQuote() {
   const origin = document.getElementById("from").value;
   const destination = document.getElementById("to").value;
   const houseType = document.getElementById("house-type").value;
+  console.log("Quote button clicked");
+
 
   if (!origin || !destination || !houseType) {
     alert("Please fill in all fields before calculating.");
