@@ -1,134 +1,68 @@
+<!-- Updated FelTon Quote Page HTML -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FelTon Movers & Cleaners | Moving & Cleaning Services in Kenya</title>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="FelTon Movers & Cleaners offers fast, reliable, and affordable moving and cleaning services across Kenya. Get a free quote today!" />
-    <meta name="keywords" content="FelTon Movers, Kenya movers, Nairobi cleaning services, house moving, office relocation, deep cleaning" />
-    <meta name="author" content="FelTon Movers & Cleaners" />
-  
-    <!-- Open Graph (for social media previews) -->
-    <meta property="og:title" content="FelTon Movers & Cleaners" />
-    <meta property="og:description" content="Fast and affordable moving & cleaning services across Kenya." />
-    <meta property="og:image" content="https://www.feltonmovers.co.ke/images/preview.jpg" /> <!-- Replace with actual image URL -->
-    <meta property="og:url" content="https://www.feltonmovers.co.ke/" />
-    <meta property="og:type" content="website" />
-  
-    <!-- Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FelTon Movers</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>FelTon Movers Quote</title>
+  <link rel="stylesheet" href="css/quote.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="logo">FelTon</div>
-    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#">Home</a></li>
-      <li><a href="blog.html" target="_blank">Blog</a></li>
-      <li><a href="contact.html" target="_blank">Contact</a></li>
-      <li><a href="gallery.html" target="_blank">Gallery</a></li>
-      <li><a href="quote.html" target="_blank">Quote</a></li>
-    </ul>
-  </nav>
-  
+  <div class="container">
+    <h1>FelTon Movers Quote Form</h1>
+    <form id="quoteForm">
+      <input type="text" id="fullname" placeholder="Your Name" required />
+      <input type="tel" id="phone" placeholder="Phone Number" required />
+      <input type="email" id="email" placeholder="Email Address" required />
 
-  <div class="hero">
-    <div class="overlay">
-      <div class="hero-content">
-        <h1>FelTon Movers & Cleaners</h1>
-        <p>Reliable. Fast. Affordable.</p>
-        <a href="quote.html" class="btn" target="_blank">Get a Free Quote</a>
+      <div class="location-group">
+        <input type="text" id="from" placeholder="Moving From" required />
+        <button type="button" onclick="openMap('from')">Pick from Map</button>
       </div>
+
+      <div class="location-group">
+        <input type="text" id="to" placeholder="Moving To" required />
+        <button type="button" onclick="openMap('to')">Pick from Map</button>
+      </div>
+
+      <select id="house-type" required>
+        <option value="">Select House Type</option>
+        <option value="Bedsitter">Bedsitter</option>
+        <option value="1 Bedroom">1 Bedroom</option>
+        <option value="2 Bedroom">2 Bedroom</option>
+        <option value="3 Bedroom">3 Bedroom</option>
+        <option value="More than 3 Bedrooms">More than 3 Bedrooms</option>
+      </select>
+
+      <button type="submit">Calculate Quote</button>
+    </form>
+
+    <div id="loader" style="display:none">Calculating...</div>
+    <div id="priceDisplay"></div>
+    <button id="downloadPDF" style="display:none">Download PDF</button>
+
+    <!-- Manual distance fallback section -->
+    <div id="manualDistanceSection" style="display:none; margin-top: 20px;">
+      <h3>Couldn't detect distance?</h3>
+      <p>Enter the distance in kilometers manually:</p>
+      <input type="number" id="manualDistanceInput" placeholder="Enter distance in km" min="1" />
+      <button id="manualCalcBtn">Calculate Quote Manually</button>
     </div>
   </div>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Get a Quote | FelTon Movers</title>
-  <link rel="stylesheet" href="css/quote.css" />
-</head>
-<body>
-  
-  
-  <section class="quote-page">
-    <div class="quote-container">
-      <h1>Get Your Free Moving Quote</h1>
-      <p>Fill in the form below and we’ll calculate your estimated price instantly.</p>
 
-      <form id="quoteForm">
-        <div class="form-group">
-          <label for="fullname">Full Name</label>
-          <input type="text" id="fullname" name="fullname" required>
-        </div>
-
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone" required>
-        </div>
-
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-
-        <div class="form-group">
-          <label for="from">Moving From</label>
-          <input type="text" id="from" name="from" placeholder="Start location" required>
-        </div>
-
-        <div class="form-group">
-          <label for="to">Moving To</label>
-          <input type="text" id="to" name="to" placeholder="Destination" required>
-        </div>
-
-        <div class="form-group">
-          <label for="distance">Estimated Distance (in kilometers)</label>
-          <input type="number" id="distance" name="distance" min="1" required>
-        </div>
-
-        <div class="form-group">
-          <label for="house-type">House Size</label>
-          <select id="house-type" name="house-type" required>
-            <option value="">Select house size</option>
-            <option value="Bedsitter">Bedsitter</option>
-            <option value="1 Bedroom">1 Bedroom</option>
-            <option value="2 Bedroom">2 Bedroom</option>
-            <option value="3 Bedroom">3 Bedroom</option>
-            <option value="More than 3 Bedrooms">More than 3 Bedrooms</option>
-          </select>
-        </div>
-
-        <button type="submit">Calculate Quote</button>
-        <div id="priceDisplay" class="price-output" style="display:none; margin-top: 20px;"></div>
-      </form>
+  <!-- Map Modal -->
+  <div id="mapModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeMap()">&times;</span>
+      <div id="map" style="height: 400px;"></div>
     </div>
-  </section>
+  </div>
 
-  <!-- Manual Quote JS -->
- 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
   <script src="quote.js"></script>
-
-
-  <!-- JS to handle form submission -->
-  <script>
-    document.getElementById("quoteForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      calculateQuote();
-    });
-  </script>
-  
 </body>
 </html>

@@ -493,16 +493,15 @@ footer {
   color: #222;
 }
 
+/* Comparison Table Styling */
 .comparison-table {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  max-width: 900px;
-  margin: auto;
-  gap: 1px;
-  background-color: #ddd;
+  gap: 10px;
+  padding: 20px;
+  background: #f9f9f9;
   border-radius: 10px;
-  overflow: hidden;
-  font-size: 1rem;
+  text-align: center;
 }
 
 .comparison-header,
@@ -510,27 +509,53 @@ footer {
   display: contents;
 }
 
-.comparison-header div {
-  background-color: #ff6600;
-  color: white;
-  font-weight: bold;
-  padding: 20px;
-  text-align: center;
-}
-
+.comparison-header div,
 .comparison-row div {
-  background-color: white;
-  padding: 20px;
-  text-align: center;
+  padding: 10px;
   border-bottom: 1px solid #ddd;
+  font-weight: bold;
 }
 
+.comparison-header div:first-child,
 .comparison-row div:first-child {
-  font-weight: bold;
-  background-color: #f9f9f9;
+  font-weight: normal;
   text-align: left;
-  padding-left: 20px;
 }
+
+/* Mobile Friendly (Stack Columns) */
+@media screen and (max-width: 768px) {
+  .comparison-table {
+    display: block;
+  }
+
+  .comparison-row {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .comparison-row div {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+
+  .comparison-row div:nth-child(1) {
+    font-weight: bold;
+    background: #f0f0f0;
+  }
+
+  .comparison-row div:last-child {
+    border-bottom: none;
+  }
+
+  .comparison-header {
+    display: none; /* hide header on small screens */
+  }
+}
+
 .whatsapp-float {
   position: fixed;
   bottom: 25px;

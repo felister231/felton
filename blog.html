@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <div class="logo">
-    <a href="index.html">FelTon</a>
-  
-  
+  <title>FelTon | Blog</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/blog.css" />
 </head>
 <body>
 
-
+  <!-- Navigation Bar -->
   <nav class="navbar">
+    <div class="logo">
+      <a href="index.html">FelTon</a>
+    </div>
     <div class="menu-toggle" id="menu-toggle">&#9776;</div>
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html">Home</a></li>
@@ -23,6 +23,8 @@
       <li><a href="quote.html" target="_blank">Quote</a></li>
     </ul>
   </nav>
+
+  <!-- Hero Section -->
   <div class="hero">
     <div class="overlay">
       <div class="hero-content">
@@ -33,8 +35,7 @@
     </div>
   </div>
 
-  
-
+  <!-- Blog Section -->
   <section class="blog">
     <h2>Moving & Cleaning Tips</h2>
     <div class="blog-grid">
@@ -43,7 +44,7 @@
         <h3>5 Things to Do Before Moving</h3>
         <p>Here’s a checklist to make your move stress-free and organized...</p>
         <a href="#" onclick="toggleText(this)">Read More</a>
-        <div class="hidden-text" style="display:none;">
+        <div class="hidden-text">
           <p>
             ✅ Create a moving inventory<br>
             ✅ Start packing early<br>
@@ -58,7 +59,7 @@
         <h3>Why Deep Cleaning is a Must</h3>
         <p>Most people don’t realize how important it is after renovations...</p>
         <a href="#" onclick="toggleText(this)">Read More</a>
-        <div class="hidden-text" style="display:none;">
+        <div class="hidden-text">
           <p>
             🧽 Deep cleaning gets rid of construction dust<br>
             🦠 Eliminates hidden bacteria and allergens<br>
@@ -72,7 +73,7 @@
         <h3>How to Choose a Moving Company</h3>
         <p>We break down what to look for when hiring a reliable mover...</p>
         <a href="#" onclick="toggleText(this)">Read More</a>
-        <div class="hidden-text" style="display:none;">
+        <div class="hidden-text">
           <p>
             ✅ Look for transparent pricing<br>
             ✅ Ensure they have a physical office<br>
@@ -83,44 +84,49 @@
         </div>
       </div>
 
+      <div class="blog-post">
+        <img src="css/images/fragile-goods-e1703000439483.jpg" alt="Packing fragile items" class="blog-thumb" />
+        <h3>How to Pack Fragile Items Like a Pro</h3>
+        <small class="blog-meta">🗓️ Posted: July 2, 2025 | 📁 Category: Moving Tips</small>
+        <p>Broken glasses? Cracked TV? Not on FelTon’s watch. Here's how to keep your delicate items safe during a move...</p>
+        <a href="#" onclick="toggleText(this)">Read More</a>
+        <div class="hidden-text">
+          <p>
+            📦 Use thick boxes and bubble wrap for breakables<br>
+            🍽️ Wrap each plate or cup individually with newspaper<br>
+            📺 TVs and electronics should be boxed in their original packaging<br>
+            🚚 Label each box: "FRAGILE – THIS SIDE UP"<br>
+            ✅ Or better yet, let FelTon do it. We bring the boxes *and* the muscle 💪
+          </p>
+        </div>
+      </div>
+
+      <div class="blog-post">
+        <img src="css/images/cleaning equpment.jpg" alt="Cleaning supplies" class="blog-thumb" />
+        <img src="css/images/common-household-cleaning-agents.jpg" alt="Cleaning supplies" class="blog-thumb" />
+        <h3>Top 7 Cleaning Mistakes to Avoid Before Moving</h3>
+        <small class="blog-meta">🗓️ Posted: July 2, 2025 | 📁 Category: Cleaning Advice</small>
+        <p>Cleaning before you move? Great. Doing it wrong? Not so great. Here's what most people mess up...</p>
+        <a href="#" onclick="toggleText(this)">Read More</a>
+        <div class="hidden-text">
+          <p>
+            ❌ Skipping behind appliances<br>
+            ❌ Forgetting the inside of drawers/cabinets<br>
+            ❌ Using the wrong products on glass or wood<br>
+            ❌ Ignoring bathroom mold<br>
+            ❌ Not airing the house after mopping<br>
+            ✅ Solution: Call FelTon. We deep clean with no shortcuts. 🧼✨
+          </p>
+        </div>
+      </div>
+
     </div>
   </section>
-  <div class="blog-post">
-    <img src="css/images/fragile-goods-e1703000439483.jpg" alt="Packing fragile items" class="blog-thumb" />
-    <h3>How to Pack Fragile Items Like a Pro</h3>
-    <small class="blog-meta">🗓️ Posted: July 2, 2025 | 📁 Category: Moving Tips</small>
-    <p>Broken glasses? Cracked TV? Not on FelTon’s watch. Here's how to keep your delicate items safe during a move...</p>
-    <a href="#" onclick="toggleText(this)">Read More</a>
-    <div class="hidden-text" style="display:none;">
-      <p>
-        📦 Use thick boxes and bubble wrap for breakables<br>
-        🍽️ Wrap each plate or cup individually with newspaper<br>
-        📺 TVs and electronics should be boxed in their original packaging<br>
-        🚚 Label each box: "FRAGILE – THIS SIDE UP"<br>
-        ✅ Or better yet, let FelTon do it. We bring the boxes *and* the muscle 💪
-      </p>
-    </div>
-  </div>
-  <div class="blog-post">
-    <img src="css/images/cleaning equpment.jpg" alt="Cleaning supplies" class="blog-thumb" />
-    <img src="css/images/common-household-cleaning-agents.jpg" alt="Cleaning supplies" class="blog-thumb" />
 
-    <h3>Top 7 Cleaning Mistakes to Avoid Before Moving</h3>
-    <small class="blog-meta">🗓️ Posted: July 2, 2025 | 📁 Category: Cleaning Advice</small>
-    <p>Cleaning before you move? Great. Doing it wrong? Not so great. Here's what most people mess up...</p>
-    <a href="#" onclick="toggleText(this)">Read More</a>
-    <div class="hidden-text" style="display:none;">
-      <p>
-        ❌ Skipping behind appliances<br>
-        ❌ Forgetting the inside of drawers/cabinets<br>
-        ❌ Using the wrong products on glass or wood<br>
-        ❌ Ignoring bathroom mold<br>
-        ❌ Not airing the house after mopping<br>
-        ✅ Solution: Call FelTon. We deep clean with no shortcuts. 🧼✨
-      </p>
-    </div>
-  </div>
-  
+  <!-- WhatsApp Float -->
+  <a href="https://wa.me/254111300121" class="whatsapp-float" target="_blank" title="Chat with us on WhatsApp">💬 Chat with us</a>
+
+  <!-- JS -->
   <script>
     function toggleText(el) {
       const hidden = el.nextElementSibling;
@@ -132,23 +138,12 @@
         el.innerText = "Read More";
       }
     }
+
+    const toggle = document.getElementById('menu-toggle');
+    const links = document.getElementById('nav-links');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('active');
+    });
   </script>
-  <a
-  href="https://wa.me/254111300121"
-  class="whatsapp-float"
-  target="_blank"
-  title="Chat with us on WhatsApp"
->
-  💬 Chat with us
-</a>
-<script>
-  const toggle = document.getElementById('menu-toggle');
-  const links = document.getElementById('nav-links');
-
-  toggle.addEventListener('click', () => {
-    links.classList.toggle('active');
-  });
-</script>
-
 </body>
 </html>
