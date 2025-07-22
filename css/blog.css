@@ -4,6 +4,18 @@
   background-color: #f9f9f9;
   text-align: center;
 }
+.back-arrow {
+  display: inline-block;
+  margin: 20px;
+  font-size: 1.2rem;
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.back-arrow:hover {
+  color: #0056b3;
+}
 
 .blog h2 {
   font-size: 2.5rem;

@@ -10,7 +10,19 @@
     margin-bottom: 20px;
     color: #222;
   }
-  
+  .back-arrow {
+  display: inline-block;
+  margin: 20px;
+  font-size: 1.2rem;
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.back-arrow:hover {
+  color: #0056b3;
+}
+
   .contact p {
     font-size: 1rem;
     color: #666;
