@@ -6,6 +6,8 @@ let selectedCoords = {
 let mapInstance = null;
 let locationPin = null;
 
+const API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjIzYjRjMDQ3MjFiMzQzZGFhZGZkN2QzYTY0ZDRhOWYwIiwiaCI6Im11cm11cjY0In0=";
+
 function openMap(field) {
   currentField = field;
   document.getElementById('mapModal').style.display = 'block';
@@ -58,7 +60,7 @@ function initMap() {
     const { lat, lng } = locationPin.getLatLng();
     selectedCoords[currentField] = [lng, lat];
     try {
-      const res = await fetch(`https://api.openrouteservice.org/geocode/reverse?api_key=YOUR_API_KEY&point.lon=${lng}&point.lat=${lat}`);
+      const res = await fetch(`https://api.openrouteservice.org/geocode/reverse?api_key=${API_KEY}&point.lon=${lng}&point.lat=${lat}`);
       const data = await res.json();
       const label = data.features[0]?.properties?.label || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
       document.getElementById(currentField).value = label;
@@ -91,8 +93,8 @@ document.getElementById("quoteForm").addEventListener("submit", async function (
 
     if (!fromCoords || !toCoords) {
       const [fromRes, toRes] = await Promise.all([
-        fetch(`https://api.openrouteservice.org/geocode/search/structured?api_key=YOUR_API_KEY&address=${encodeURIComponent(fromInput)}&country=Kenya`),
-        fetch(`https://api.openrouteservice.org/geocode/search/structured?api_key=YOUR_API_KEY&address=${encodeURIComponent(toInput)}&country=Kenya`)
+        fetch(`https://api.openrouteservice.org/geocode/search/structured?api_key=${API_KEY}&address=${encodeURIComponent(fromInput)}&country=Kenya`),
+        fetch(`https://api.openrouteservice.org/geocode/search/structured?api_key=${API_KEY}&address=${encodeURIComponent(toInput)}&country=Kenya`)
       ]);
 
       const fromData = await fromRes.json();
@@ -111,7 +113,7 @@ document.getElementById("quoteForm").addEventListener("submit", async function (
     const routeRes = await fetch('https://api.openrouteservice.org/v2/directions/driving-car/json', {
       method: 'POST',
       headers: {
-        'Authorization': 'YOUR_API_KEY',
+        'Authorization': API_KEY,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
@@ -133,7 +135,7 @@ document.getElementById("quoteForm").addEventListener("submit", async function (
 });
 
 document.getElementById("manualCalcBtn").addEventListener("click", function () {
-  const distanceKm = parseFloat(document.getElementById('manualDistance').value);
+  const distanceKm = parseFloat(document.getElementById('manualDistanceInput').value);
   const houseType = document.getElementById('house-type').value;
   showQuoteResult(distanceKm, houseType);
 });
