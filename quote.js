@@ -145,25 +145,8 @@ function showQuoteResult(distanceKm, houseType) {
   const downloadBtn = document.getElementById('downloadPDF');
   const loader = document.getElementById('loader');
 
-  let price = 0;
-  switch (houseType) {
-    case 'Bedsitter':
-      price = distanceKm <= 5 ? 5000 : Math.ceil(distanceKm / 5) * 5000;
-      break;
-    case '1 Bedroom':
-      price = distanceKm <= 5 ? 10000 : 10000 + Math.ceil((distanceKm - 5) / 5) * 5000;
-      break;
-    case '2 Bedroom':
-      price = distanceKm <= 5 ? 15000 : 15000 + Math.ceil((distanceKm - 5) / 5) * 5000;
-      break;
-    case '3 Bedroom':
-      price = distanceKm <= 5 ? 20000 : 20000 + (Math.ceil(distanceKm / 5) - 1) * 10000;
-      break;
-    case 'More than 3 Bedrooms':
-      price = distanceKm <= 20 ? 30000 : 30000 + Math.ceil((distanceKm - 20) / 5) * 10000;
-      break;
-  }
-
+  
+  
   loader.style.display = 'none';
   priceDisplay.style.display = 'block';
   priceDisplay.innerHTML = `Distance: ${distanceKm} km<br><strong>Estimated Cost:</strong> KSh ${price.toLocaleString()}`;
