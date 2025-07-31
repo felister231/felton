@@ -22,22 +22,19 @@ function closeMap() {
     mapInstance = null;
   }
 }
-
 function initMap() {
   if (mapInstance) {
     mapInstance.remove();
   }
 
-  let defaultCoords = [-0.0236, 37.9062]; // Center of Kenya
+  // ✅ Default to Nairobi city center
+  let defaultCoords = [-1.286389, 36.817223];
   if (selectedCoords[currentField]) {
     defaultCoords = [selectedCoords[currentField][1], selectedCoords[currentField][0]];
   }
 
   mapInstance = L.map('map').setView(defaultCoords, 13);
-
-  setTimeout(() => {
-    mapInstance.invalidateSize();
-  }, 100);
+  setTimeout(() => mapInstance.invalidateSize(), 100);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
@@ -85,6 +82,7 @@ function initMap() {
     }
   });
 }
+
 
 document.getElementById("quoteForm").addEventListener("submit", async function (e) {
   e.preventDefault();
@@ -206,9 +204,13 @@ function showQuoteResult(distanceKm, houseType) {
   const email = document.getElementById('email').value;
   const from = document.getElementById('from').value;
   const to = document.getElementById('to').value;
+const rawMessage = `Hi FelTon,\nHere is my moving quote:\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nFrom: ${from}\nTo: ${to}\nDistance: ${distanceKm} km\nHouse Type: ${houseType}\nEstimated Cost: KSh ${price.toLocaleString()}\n\nPlease get in touch to confirm availability.`;
+const whatsappURL = `https://wa.me/254111300121?text=${encodeURIComponent(rawMessage)}`;
+const promptShare = confirm("Would you like to send this quote to FelTon via WhatsApp?");
 
-  const message = `FelTon Movers Quote:%0AName: ${name}%0APhone: ${phone}%0AEmail: ${email}%0AFrom: ${from}%0ATo: ${to}%0ADistance: ${distanceKm} km%0AHouse Type: ${houseType}%0AEstimated Cost: KSh ${price.toLocaleString()}`;
-  const whatsappURL = `https://wa.me/?text=${message}`;
+if (promptShare) {
+  window.open(whatsappURL, '_blank');
+}
 
   if (!document.getElementById('whatsappBtn')) {
     const whatsappBtn = document.createElement('a');
