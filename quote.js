@@ -1,4 +1,4 @@
-// ========== FINAL JS: quote.js ==========
+// ========== FINAL JS: quote.js with Email, WhatsApp, Calendar ==========
 let currentField = '';
 let selectedCoords = {
   from: null,
@@ -200,13 +200,65 @@ function showQuoteResult(distanceKm, houseType) {
   priceDisplay.innerHTML = `Distance: ${distanceKm} km<br><strong>Estimated Cost:</strong> KSh ${price.toLocaleString()}`;
   downloadBtn.style.display = 'inline-block';
 
+  // WhatsApp quote sharing link
+  const name = document.getElementById('fullname').value;
+  const phone = document.getElementById('phone').value;
+  const email = document.getElementById('email').value;
+  const from = document.getElementById('from').value;
+  const to = document.getElementById('to').value;
+
+  const message = `FelTon Movers Quote:%0AName: ${name}%0APhone: ${phone}%0AEmail: ${email}%0AFrom: ${from}%0ATo: ${to}%0ADistance: ${distanceKm} km%0AHouse Type: ${houseType}%0AEstimated Cost: KSh ${price.toLocaleString()}`;
+  const whatsappURL = `https://wa.me/?text=${message}`;
+
+  if (!document.getElementById('whatsappBtn')) {
+    const whatsappBtn = document.createElement('a');
+    whatsappBtn.id = 'whatsappBtn';
+    whatsappBtn.href = whatsappURL;
+    whatsappBtn.target = '_blank';
+    whatsappBtn.innerText = 'Share via WhatsApp';
+    whatsappBtn.style.display = 'inline-block';
+    whatsappBtn.style.marginTop = '10px';
+    whatsappBtn.style.backgroundColor = '#25D366';
+    whatsappBtn.style.color = 'white';
+    whatsappBtn.style.padding = '10px 20px';
+    whatsappBtn.style.borderRadius = '5px';
+    whatsappBtn.style.textDecoration = 'none';
+    priceDisplay.appendChild(whatsappBtn);
+  }
+
   downloadBtn.onclick = () => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     doc.text(
-      `FelTon Movers Quote\n\nName: ${document.getElementById('fullname').value}\nPhone: ${document.getElementById('phone').value}\nEmail: ${document.getElementById('email').value}\nFrom: ${document.getElementById('from').value}\nTo: ${document.getElementById('to').value}\nDistance: ${distanceKm} km\nHouse Type: ${houseType}\nEstimated Cost: KSh ${price.toLocaleString()}`.trim(),
+      `FelTon Movers Quote\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nFrom: ${from}\nTo: ${to}\nDistance: ${distanceKm} km\nHouse Type: ${houseType}\nEstimated Cost: KSh ${price.toLocaleString()}`.trim(),
       10, 10
     );
     doc.save("FelTon_Moving_Quote.pdf");
   };
+
+  // Booking calendar event link (Google Calendar)
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() + 1);
+  const endDate = new Date(startDate);
+  endDate.setHours(endDate.getHours() + 2);
+  const format = d => d.toISOString().replace(/[-:]|\.\d{3}/g, '').slice(0, 15);
+
+  const calendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=FelTon%20Moving%20Booking&dates=${format(startDate)}/${format(endDate)}&details=${encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nFrom: ${from}\nTo: ${to}\nHouse Type: ${houseType}\nQuote: KSh ${price.toLocaleString()}`)}`;
+
+  if (!document.getElementById('calendarBtn')) {
+    const calendarBtn = document.createElement('a');
+    calendarBtn.id = 'calendarBtn';
+    calendarBtn.href = calendarLink;
+    calendarBtn.target = '_blank';
+    calendarBtn.innerText = 'Add to Google Calendar';
+    calendarBtn.style.display = 'inline-block';
+    calendarBtn.style.marginTop = '10px';
+    calendarBtn.style.marginLeft = '10px';
+    calendarBtn.style.backgroundColor = '#4285F4';
+    calendarBtn.style.color = 'white';
+    calendarBtn.style.padding = '10px 20px';
+    calendarBtn.style.borderRadius = '5px';
+    calendarBtn.style.textDecoration = 'none';
+    priceDisplay.appendChild(calendarBtn);
+  }
 } // ========== END JS ==========
