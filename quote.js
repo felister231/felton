@@ -1,3 +1,4 @@
+// ========== FINAL JS: quote.js ==========
 let currentField = '';
 let selectedCoords = {
   from: null,
@@ -16,6 +17,10 @@ function openMap(field) {
 
 function closeMap() {
   document.getElementById('mapModal').style.display = 'none';
+  if (mapInstance) {
+    mapInstance.remove();
+    mapInstance = null;
+  }
 }
 
 function initMap() {
@@ -23,17 +28,16 @@ function initMap() {
     mapInstance.remove();
   }
 
-  mapInstance = L.map('map').setView([-1.286389, 36.817223], 13);
+  let defaultCoords = [-0.0236, 37.9062]; // Center of Kenya
+  if (selectedCoords[currentField]) {
+    defaultCoords = [selectedCoords[currentField][1], selectedCoords[currentField][0]];
+  }
 
-  const bounds = L.latLngBounds(
-    L.latLng(-4.678, 33.909),
-    L.latLng(5.506, 41.899)
-  );
+  mapInstance = L.map('map').setView(defaultCoords, 13);
 
-  mapInstance.setMaxBounds(bounds);
-  mapInstance.on('drag', () => {
-    mapInstance.panInsideBounds(bounds, { animate: false });
-  });
+  setTimeout(() => {
+    mapInstance.invalidateSize();
+  }, 100);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
@@ -42,19 +46,23 @@ function initMap() {
   L.Control.geocoder({
     defaultMarkGeocode: true,
     geocoder: L.Control.Geocoder.nominatim({
-      geocodingQueryParams: {
-        countrycodes: 'KE'
-      }
+      geocodingQueryParams: { countrycodes: 'KE' }
     })
   }).addTo(mapInstance);
 
   const input = document.querySelector('.leaflet-control-geocoder-form input');
   if (input) {
-    input.placeholder = "Search apartments, estates in Kenya";
+    input.placeholder = "Search any location in Kenya";
     input.style.color = '#333';
   }
 
-  locationPin = L.marker(mapInstance.getCenter(), { draggable: true }).addTo(mapInstance);
+  locationPin = L.marker(defaultCoords, {
+    draggable: true,
+    autoPan: true,
+    riseOnHover: true
+  }).addTo(mapInstance);
+
+  locationPin.bindPopup("Drag me to your exact location! Tap again to confirm.").openPopup();
 
   locationPin.on('dragend', async function () {
     const { lat, lng } = locationPin.getLatLng();
@@ -64,16 +72,22 @@ function initMap() {
       const data = await res.json();
       const label = data.features[0]?.properties?.label || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
       document.getElementById(currentField).value = label;
-      closeMap();
+      locationPin.bindPopup("Location saved ✅").openPopup();
+      setTimeout(() => closeMap(), 800);
     } catch (err) {
       alert("Couldn't detect location. Please enter it manually.");
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      closeMap();
     }
   });
 }
 
 document.getElementById("quoteForm").addEventListener("submit", async function (e) {
   e.preventDefault();
-
   const fromInput = document.getElementById('from').value;
   const toInput = document.getElementById('to').value;
   const houseType = document.getElementById('house-type').value;
@@ -120,9 +134,7 @@ document.getElementById("quoteForm").addEventListener("submit", async function (
     });
 
     const routeData = await routeRes.json();
-    const distanceMeters = routeData.routes[0].summary.distance;
-    const distanceKm = Math.round(distanceMeters / 1000);
-
+    const distanceKm = Math.round(routeData.routes[0].summary.distance / 1000);
     showQuoteResult(distanceKm, houseType);
 
   } catch (err) {
@@ -145,8 +157,44 @@ function showQuoteResult(distanceKm, houseType) {
   const downloadBtn = document.getElementById('downloadPDF');
   const loader = document.getElementById('loader');
 
-  
-  
+  let price = 0;
+  if (houseType === 'Bedsitter') {
+    if (distanceKm <= 10) price = 10000;
+    else if (distanceKm <= 15) price = 15000;
+    else if (distanceKm <= 20) price = 20000;
+    else if (distanceKm <= 25) price = 25000;
+    else if (distanceKm <= 30) price = 30000;
+    else price = 35000;
+  } else if (houseType === '1 Bedroom') {
+    if (distanceKm <= 10) price = 15000;
+    else if (distanceKm <= 15) price = 20000;
+    else if (distanceKm <= 20) price = 25000;
+    else if (distanceKm <= 25) price = 30000;
+    else if (distanceKm <= 30) price = 35000;
+    else price = 40000;
+  } else if (houseType === '2 Bedroom') {
+    if (distanceKm <= 10) price = 20000;
+    else if (distanceKm <= 15) price = 25000;
+    else if (distanceKm <= 20) price = 30000;
+    else if (distanceKm <= 25) price = 35000;
+    else if (distanceKm <= 30) price = 40000;
+    else price = 45000;
+  } else if (houseType === '3 Bedroom') {
+    if (distanceKm <= 10) price = 25000;
+    else if (distanceKm <= 15) price = 30000;
+    else if (distanceKm <= 20) price = 35000;
+    else if (distanceKm <= 25) price = 40000;
+    else if (distanceKm <= 30) price = 45000;
+    else price = 50000;
+  } else {
+    if (distanceKm <= 10) price = 30000;
+    else if (distanceKm <= 15) price = 35000;
+    else if (distanceKm <= 20) price = 40000;
+    else if (distanceKm <= 25) price = 45000;
+    else if (distanceKm <= 30) price = 50000;
+    else price = 55000;
+  }
+
   loader.style.display = 'none';
   priceDisplay.style.display = 'block';
   priceDisplay.innerHTML = `Distance: ${distanceKm} km<br><strong>Estimated Cost:</strong> KSh ${price.toLocaleString()}`;
@@ -161,4 +209,4 @@ function showQuoteResult(distanceKm, houseType) {
     );
     doc.save("FelTon_Moving_Quote.pdf");
   };
-}
+} // ========== END JS ==========

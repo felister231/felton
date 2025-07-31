@@ -1,181 +1,163 @@
+/* ========== FINAL CSS: quote.css ========== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  color: #333;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #333;
-    }
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #222;
+  padding: 1rem 2rem;
+  color: #fff;
+}
 
+.navbar .logo a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
 
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #222;
-      padding: 1rem 2rem;
-      color: #fff;
-    }
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
 
-    .navbar .logo a {
-      text-decoration: none;
-      color: #fff;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
+.nav-links li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem;
+}
 
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 1rem;
-    }
+.nav-links li a:hover {
+  background-color: #444;
+  border-radius: 5px;
+}
 
-    .nav-links li a {
-      color: #fff;
-      text-decoration: none;
-      padding: 0.5rem;
-    }
+.menu-toggle {
+  display: none;
+}
 
-    .nav-links li a:hover {
-      background-color: #444;
-      border-radius: 5px;
-    }
+.hero {
+  position: relative;
+  background: url('https://via.placeholder.com/1600x500') center/cover no-repeat;
+  height: 300px;
+}
 
-    .menu-toggle {
-      display: none;
-    }
+.overlay {
+  background-color: rgba(0,0,0,0.6);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    .hero {
-      position: relative;
-      background: url('https://via.placeholder.com/1600x500') center/cover no-repeat;
-      height: 300px;
-    }
+.hero-content {
+  color: #fff;
+  text-align: center;
+}
 
-    .overlay {
-      background-color: rgba(0,0,0,0.6);
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+.btn {
+  background-color: #ff6600;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 1rem;
+}
 
-    .hero-content {
-      color: #fff;
-      text-align: center;
-    }
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
 
-    .btn {
-      background-color: #ff6600;
-      color: #fff;
-      padding: 0.75rem 1.5rem;
-      text-decoration: none;
-      border-radius: 5px;
-      display: inline-block;
-      margin-top: 1rem;
-    }
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      background: #fff;
-      padding: 2rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      border-radius: 8px;
-    }
+input, select, button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
+.location-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
 
-    input, select, button {
-      padding: 0.75rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+button[type="submit"], #downloadPDF, #manualCalcBtn {
+  background-color: #ff6600;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+}
 
-    .location-group {
-      display: flex;
-      gap: 0.5rem;
-      flex-direction: column;
-    }
+button:hover {
+  background-color: #e65c00;
+}
 
-    button[type="submit"], #downloadPDF, #manualCalcBtn {
-      background-color: #ff6600;
-      color: #fff;
-      cursor: pointer;
-      border: none;
-    }
+.map-instruction, .cta-panel {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 
-    button:hover {
-      background-color: #ff6600;
-    }
+.cta-button {
+  background-color: #28a745;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 1rem;
+}
 
-    .map-instruction, .cta-panel {
-      max-width: 800px;
-      margin: 2rem auto;
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+}
 
-    .cta-button {
-      background-color: #28a745;
-      color: white;
-      padding: 0.75rem 1.25rem;
-      text-decoration: none;
-      border-radius: 5px;
-      display: inline-block;
-      margin-top: 1rem;
-    }
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+}
 
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
 
-    .modal-content {
-      background: white;
-      padding: 1rem;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 600px;
-    }
-
-    .close {
-      float: right;
-      cursor: pointer;
-      font-size: 1.5rem;
-    }
-
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        gap: 0;
-        background: #333;
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 200px;
-        padding: 1rem;
-      }
-
-      .menu-toggle {
-        display: block;
-        cursor: pointer;
-      }
-      .back-arrow {
+.back-arrow {
   display: inline-block;
   margin: 20px;
   font-size: 1.2rem;
@@ -188,3 +170,21 @@
   color: #0056b3;
 }
 
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    background: #333;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 200px;
+    padding: 1rem;
+  }
+
+  .menu-toggle {
+    display: block;
+    cursor: pointer;
+  }
+}/* ========== END OF CSS =

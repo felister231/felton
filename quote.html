@@ -1,4 +1,4 @@
-<!-- Updated FelTon Quote Page HTML -->
+<!-- ========== FINAL HTML: quote.html ========== -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,32 +11,30 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-  
-
- <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="logo">
       <a href="index.html">FelTon</a>
     </div>
-    
     <div class="menu-toggle" id="menu-toggle">&#9776;</div>
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="blog.html" target="_blank">Blog</a></li>
-      <li><a href="contact.html" target="_blank">Contact</a></li>
-      <li><a href="gallery.html" target="_blank">Gallery</a></li>
-      <li><a href="quote.html" target="_blank">Quote</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="quote.html">Quote</a></li>
     </ul>
   </nav>
+
   <div class="hero">
     <div class="overlay">
       <div class="hero-content">
         <h1>FelTon Movers & Cleaners</h1>
         <p>Reliable. Fast. Affordable.</p>
-        <a href="quote.html" class="btn" target="_blank">Get a Free Quote</a>
+        <a href="quote.html" class="btn">Get a Free Quote</a>
       </div>
     </div>
   </div>
+
   <div class="container">
     <h1>FelTon Movers Quote Form</h1>
     <form id="quoteForm">
@@ -70,7 +68,6 @@
     <div id="priceDisplay"></div>
     <button id="downloadPDF" style="display:none">Download PDF</button>
 
-    <!-- Manual distance fallback section -->
     <div id="manualDistanceSection" style="display:none; margin-top: 20px;">
       <h3>Couldn't detect distance?</h3>
       <p>Enter the distance in kilometers manually:</p>
@@ -79,34 +76,31 @@
     </div>
   </div>
 
-  <!-- Map Modal -->
   <div id="mapModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeMap()">&times;</span>
       <div id="map" style="height: 400px;"></div>
     </div>
   </div>
+
   <section class="map-instruction">
     <h3>Not Sure Where to Drop Your Location?</h3>
     <p>Use our interactive map above. Tap and hold to place a marker. We’ll calculate your moving distance automatically!</p>
   </section>
-  
 
-  
   <section class="cta-panel">
     <h3>Need Help Booking?</h3>
     <p>Our team is ready to assist. Contact us anytime if you need help or want a custom quote.</p>
     <a href="tel:+254111300121" class="cta-button">Call Us Now</a>
   </section>
-  <a href="javascript:history.back()" class="back-arrow">
-  <span style="font-size: 1.5rem;">&#8592;</span>
-</a>
 
-  
-  
+  <a href="javascript:history.back()" class="back-arrow">
+    <span style="font-size: 1.5rem;">&#8592;</span>
+  </a>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
   <script src="quote.js"></script>
 </body>
 </html>
+<!-- ========== END OF HTML ========== -->
