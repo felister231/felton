@@ -157,40 +157,40 @@ function showQuoteResult(distanceKm, houseType) {
 
   let price = 0;
   if (houseType === 'Bedsitter') {
+    if (distanceKm <= 10) price = 8000;
+    else if (distanceKm <= 15) price = 10000;
+    else if (distanceKm <= 20) price = 12000;
+    else if (distanceKm <= 25) price = 14000;
+    else if (distanceKm <= 30) price = 16000;
+    else price = 20000;
+  } else if (houseType === '1 Bedroom') {
     if (distanceKm <= 10) price = 10000;
-    else if (distanceKm <= 15) price = 15000;
+    else if (distanceKm <= 15) price = 12000;
+    else if (distanceKm <= 20) price = 14000;
+    else if (distanceKm <= 25) price = 18000;
+    else if (distanceKm <= 30) price = 20000;
+    else price = 25000;
+  } else if (houseType === '2 Bedroom') {
+    if (distanceKm <= 10) price = 12000;
+    else if (distanceKm <= 15) price = 14000;
+    else if (distanceKm <= 20) price = 18000;
+    else if (distanceKm <= 25) price = 20000;
+    else if (distanceKm <= 30) price = 25000;
+    else price = 30000;
+  } else if (houseType === '3 Bedroom') {
+    if (distanceKm <= 10) price = 14000;
+    else if (distanceKm <= 15) price = 18000;
     else if (distanceKm <= 20) price = 20000;
     else if (distanceKm <= 25) price = 25000;
     else if (distanceKm <= 30) price = 30000;
     else price = 35000;
-  } else if (houseType === '1 Bedroom') {
-    if (distanceKm <= 10) price = 15000;
-    else if (distanceKm <= 15) price = 20000;
-    else if (distanceKm <= 20) price = 25000;
-    else if (distanceKm <= 25) price = 30000;
-    else if (distanceKm <= 30) price = 35000;
-    else price = 40000;
-  } else if (houseType === '2 Bedroom') {
-    if (distanceKm <= 10) price = 20000;
-    else if (distanceKm <= 15) price = 25000;
-    else if (distanceKm <= 20) price = 30000;
-    else if (distanceKm <= 25) price = 35000;
-    else if (distanceKm <= 30) price = 40000;
-    else price = 45000;
-  } else if (houseType === '3 Bedroom') {
-    if (distanceKm <= 10) price = 25000;
-    else if (distanceKm <= 15) price = 30000;
-    else if (distanceKm <= 20) price = 35000;
-    else if (distanceKm <= 25) price = 40000;
-    else if (distanceKm <= 30) price = 45000;
-    else price = 50000;
   } else {
-    if (distanceKm <= 10) price = 30000;
-    else if (distanceKm <= 15) price = 35000;
-    else if (distanceKm <= 20) price = 40000;
-    else if (distanceKm <= 25) price = 45000;
-    else if (distanceKm <= 30) price = 50000;
-    else price = 55000;
+    if (distanceKm <= 10) price = 16000;
+    else if (distanceKm <= 15) price = 18000;
+    else if (distanceKm <= 20) price = 20000;
+    else if (distanceKm <= 25) price = 25000;
+    else if (distanceKm <= 30) price = 30000;
+    else price = 35000;
   }
 
   loader.style.display = 'none';
