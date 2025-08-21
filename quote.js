@@ -1,183 +1,135 @@
-// ========== FINAL JS: quote.js with Email, WhatsApp, Calendar ==========
-let currentField = '';
-let selectedCoords = {
-  from: null,
-  to: null
-};
-let mapInstance = null;
-let locationPin = null;
+// ========== quote.js (Mapbox + your bracket pricing) ==========
 
-const API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjIzYjRjMDQ3MjFiMzQzZGFhZGZkN2QzYTY0ZDRhOWYwIiwiaCI6Im11cm11cjY0In0=";
+// Your Mapbox token
+const MAPBOX_TOKEN = "pk.eyJ1IjoibWFsaXR1IiwiYSI6ImNtZWxkY3gyaDBmbHEybHNlejNqeXI3b3oifQ.Gj6G79AHfkd4jD6FnIohlg";
 
-function openMap(field) {
-  currentField = field;
-  document.getElementById('mapModal').style.display = 'block';
-  initMap();
-}
+// Globals
+let map;                // Mapbox GL map instance
+let fromMarker = null;  // "From" marker
+let toMarker = null;    // "To" marker
+let fromCoords = null;  // [lng, lat]
+let toCoords = null;    // [lng, lat]
+let activeField = null; // 'from' | 'to'
 
-function closeMap() {
-  document.getElementById('mapModal').style.display = 'none';
-  if (mapInstance) {
-    mapInstance.remove();
-    mapInstance = null;
-  }
-}
-function initMap() {
-  if (mapInstance) {
-    mapInstance.remove();
-  }
+// ---- Modal map open/close ----
+window.openMap = function(field) {
+  activeField = field; // remember which field we're picking for
+  const modal = document.getElementById("mapModal");
+  modal.style.display = "block";
 
-  // ✅ Default to Nairobi city center
-  let defaultCoords = [-1.286389, 36.817223];
-  if (selectedCoords[currentField]) {
-    defaultCoords = [selectedCoords[currentField][1], selectedCoords[currentField][0]];
-  }
-
-  mapInstance = L.map('map').setView(defaultCoords, 13);
-  setTimeout(() => mapInstance.invalidateSize(), 100);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(mapInstance);
-
-  L.Control.geocoder({
-    defaultMarkGeocode: true,
-    geocoder: L.Control.Geocoder.nominatim({
-      geocodingQueryParams: { countrycodes: 'KE' }
-    })
-  }).addTo(mapInstance);
-
-  const input = document.querySelector('.leaflet-control-geocoder-form input');
-  if (input) {
-    input.placeholder = "Search any location in Kenya";
-    input.style.color = '#333';
-  }
-
-  locationPin = L.marker(defaultCoords, {
-    draggable: true,
-    autoPan: true,
-    riseOnHover: true
-  }).addTo(mapInstance);
-
-  locationPin.bindPopup("Drag me to your exact location! Tap again to confirm.").openPopup();
-
-  locationPin.on('dragend', async function () {
-    const { lat, lng } = locationPin.getLatLng();
-    selectedCoords[currentField] = [lng, lat];
-    try {
-      const res = await fetch(`https://api.openrouteservice.org/geocode/reverse?api_key=${API_KEY}&point.lon=${lng}&point.lat=${lat}`);
-      const data = await res.json();
-      const label = data.features[0]?.properties?.label || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-      document.getElementById(currentField).value = label;
-      locationPin.bindPopup("Location saved ✅").openPopup();
-      setTimeout(() => closeMap(), 800);
-    } catch (err) {
-      alert("Couldn't detect location. Please enter it manually.");
+  // If map not initialized yet, create it
+  if (!map) {
+    // Ensure Mapbox GL script is present
+    if (typeof mapboxgl === "undefined") {
+      alert("Map failed to load. Please check your internet connection.");
+      return;
     }
-  });
+    mapboxgl.accessToken = MAPBOX_TOKEN;
 
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') {
-      closeMap();
-    }
-  });
-}
-
-
-document.getElementById("quoteForm").addEventListener("submit", async function (e) {
-  e.preventDefault();
-  const fromInput = document.getElementById('from').value;
-  const toInput = document.getElementById('to').value;
-  const houseType = document.getElementById('house-type').value;
-  const priceDisplay = document.getElementById('priceDisplay');
-  const loader = document.getElementById('loader');
-  const downloadBtn = document.getElementById('downloadPDF');
-  const manualSection = document.getElementById('manualDistanceSection');
-
-  loader.style.display = 'block';
-  priceDisplay.style.display = 'none';
-  downloadBtn.style.display = 'none';
-  manualSection.style.display = 'none';
-
-  try {
-    let fromCoords = selectedCoords.from;
-    let toCoords = selectedCoords.to;
-
-    if (!fromCoords || !toCoords) {
-      const [fromRes, toRes] = await Promise.all([
-        fetch(`https://api.openrouteservice.org/geocode/search/structured?api_key=${API_KEY}&address=${encodeURIComponent(fromInput)}&country=Kenya`),
-        fetch(`https://api.openrouteservice.org/geocode/search/structured?api_key=${API_KEY}&address=${encodeURIComponent(toInput)}&country=Kenya`)
-      ]);
-
-      const fromData = await fromRes.json();
-      const toData = await toRes.json();
-
-      if (!fromData.features.length || !toData.features.length) {
-        throw new Error("Could not determine one or both locations.");
-      }
-
-      fromCoords = fromData.features[0].geometry.coordinates;
-      toCoords = toData.features[0].geometry.coordinates;
-    }
-
-    const body = { coordinates: [fromCoords, toCoords] };
-
-    const routeRes = await fetch('https://api.openrouteservice.org/v2/directions/driving-car/json', {
-      method: 'POST',
-      headers: {
-        'Authorization': API_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
+    map = new mapboxgl.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v12",
+      center: [36.817223, -1.286389], // Nairobi CBD approx [lng, lat]
+      zoom: 12
     });
 
-    const routeData = await routeRes.json();
-    const distanceKm = Math.round(routeData.routes[0].summary.distance / 1000);
-    showQuoteResult(distanceKm, houseType);
+    map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
-  } catch (err) {
-    loader.style.display = 'none';
-    manualSection.style.display = 'block';
-    priceDisplay.innerHTML = "<strong>We couldn't determine the distance automatically. Please enter it manually.</strong>";
-    priceDisplay.style.display = 'block';
-    console.error(err);
+    // Place / replace marker on click, reverse-geocode, fill input
+    map.on("click", async (e) => {
+      const lngLat = [e.lngLat.lng, e.lngLat.lat];
+
+      if (activeField === "from") {
+        if (fromMarker) fromMarker.remove();
+        fromMarker = new mapboxgl.Marker({ color: "#10b981" }) // green
+          .setLngLat(lngLat)
+          .addTo(map);
+        fromCoords = lngLat;
+      } else {
+        if (toMarker) toMarker.remove();
+        toMarker = new mapboxgl.Marker({ color: "#ef4444" }) // red
+          .setLngLat(lngLat)
+          .addTo(map);
+        toCoords = lngLat;
+      }
+
+      // Reverse geocode to a friendly place name
+      try {
+        const placeName = await reverseGeocode(lngLat);
+        document.getElementById(activeField).value = placeName;
+      } catch {
+        document.getElementById(activeField).value = `${lngLat[1].toFixed(6)}, ${lngLat[0].toFixed(6)}`;
+      }
+
+      closeMap(); // close after selection (matches your UX)
+    });
+
+    // Safety: resize after modal becomes visible so tiles render correctly
+    setTimeout(() => map.resize(), 250);
+  } else {
+    // Map exists; just resize to render within modal
+    setTimeout(() => map.resize(), 250);
   }
-});
+};
 
-document.getElementById("manualCalcBtn").addEventListener("click", function () {
-  const distanceKm = parseFloat(document.getElementById('manualDistanceInput').value);
-  const houseType = document.getElementById('house-type').value;
-  showQuoteResult(distanceKm, houseType);
-});
+window.closeMap = function() {
+  document.getElementById("mapModal").style.display = "none";
+};
 
-function showQuoteResult(distanceKm, houseType) {
-  const priceDisplay = document.getElementById('priceDisplay');
-  const downloadBtn = document.getElementById('downloadPDF');
-  const loader = document.getElementById('loader');
+// ---- Geocoding helpers ----
+async function reverseGeocode([lng, lat]) {
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?limit=1&access_token=${MAPBOX_TOKEN}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const name = data?.features?.[0]?.place_name;
+  if (!name) throw new Error("No reverse geocode result");
+  return name;
+}
 
+async function forwardGeocode(query) {
+  if (!query || !query.trim()) return null;
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?limit=1&proximity=36.817223,-1.286389&access_token=${MAPBOX_TOKEN}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const feat = data?.features?.[0];
+  return feat ? feat.center : null; // [lng, lat]
+}
+
+// ---- Directions / Distance ----
+async function getDistanceKm(fromLngLat, toLngLat) {
+  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${fromLngLat[0]},${fromLngLat[1]};${toLngLat[0]},${toLngLat[1]}?overview=false&access_token=${MAPBOX_TOKEN}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const meters = data?.routes?.[0]?.distance;
+  if (typeof meters !== "number") throw new Error("No route found");
+  return meters / 1000;
+}
+
+// ---- Your exact pricing brackets ----
+function calculatePrice(distanceKm, houseType) {
   let price = 0;
-  if (houseType === 'Bedsitter') {
+  if (houseType === "Bedsitter") {
     if (distanceKm <= 10) price = 8000;
     else if (distanceKm <= 15) price = 10000;
     else if (distanceKm <= 20) price = 12000;
     else if (distanceKm <= 25) price = 14000;
     else if (distanceKm <= 30) price = 16000;
     else price = 20000;
-  } else if (houseType === '1 Bedroom') {
+  } else if (houseType === "1 Bedroom") {
     if (distanceKm <= 10) price = 10000;
     else if (distanceKm <= 15) price = 12000;
     else if (distanceKm <= 20) price = 14000;
     else if (distanceKm <= 25) price = 18000;
     else if (distanceKm <= 30) price = 20000;
     else price = 25000;
-  } else if (houseType === '2 Bedroom') {
+  } else if (houseType === "2 Bedroom") {
     if (distanceKm <= 10) price = 12000;
     else if (distanceKm <= 15) price = 14000;
     else if (distanceKm <= 20) price = 18000;
     else if (distanceKm <= 25) price = 20000;
     else if (distanceKm <= 30) price = 25000;
     else price = 30000;
-  } else if (houseType === '3 Bedroom') {
+  } else if (houseType === "3 Bedroom") {
     if (distanceKm <= 10) price = 14000;
     else if (distanceKm <= 15) price = 18000;
     else if (distanceKm <= 20) price = 20000;
@@ -185,6 +137,7 @@ function showQuoteResult(distanceKm, houseType) {
     else if (distanceKm <= 30) price = 30000;
     else price = 35000;
   } else {
+    // More than 3 Bedrooms
     if (distanceKm <= 10) price = 16000;
     else if (distanceKm <= 15) price = 18000;
     else if (distanceKm <= 20) price = 20000;
@@ -192,75 +145,138 @@ function showQuoteResult(distanceKm, houseType) {
     else if (distanceKm <= 30) price = 30000;
     else price = 35000;
   }
-
-  loader.style.display = 'none';
-  priceDisplay.style.display = 'block';
-  priceDisplay.innerHTML = `Distance: ${distanceKm} km<br><strong>Estimated Cost:</strong> KSh ${price.toLocaleString()}`;
-  downloadBtn.style.display = 'inline-block';
-
-  // WhatsApp quote sharing link
-  const name = document.getElementById('fullname').value;
-  const phone = document.getElementById('phone').value;
-  const email = document.getElementById('email').value;
-  const from = document.getElementById('from').value;
-  const to = document.getElementById('to').value;
-const rawMessage = `Hi FelTon,\nHere is my moving quote:\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nFrom: ${from}\nTo: ${to}\nDistance: ${distanceKm} km\nHouse Type: ${houseType}\nEstimated Cost: KSh ${price.toLocaleString()}\n\nPlease get in touch to confirm availability.`;
-const whatsappURL = `https://wa.me/254111300121?text=${encodeURIComponent(rawMessage)}`;
-const promptShare = confirm("Would you like to send this quote to FelTon via WhatsApp?");
-
-if (promptShare) {
-  window.open(whatsappURL, '_blank');
+  return price;
 }
 
-  if (!document.getElementById('whatsappBtn')) {
-    const whatsappBtn = document.createElement('a');
-    whatsappBtn.id = 'whatsappBtn';
-    whatsappBtn.href = whatsappURL;
-    whatsappBtn.target = '_blank';
-    whatsappBtn.innerText = 'Share via WhatsApp';
-    whatsappBtn.style.display = 'inline-block';
-    whatsappBtn.style.marginTop = '10px';
-    whatsappBtn.style.backgroundColor = '#25D366';
-    whatsappBtn.style.color = 'white';
-    whatsappBtn.style.padding = '10px 20px';
-    whatsappBtn.style.borderRadius = '5px';
-    whatsappBtn.style.textDecoration = 'none';
-    priceDisplay.appendChild(whatsappBtn);
+// ---- Form submit: detect distance -> compute price ----
+document.getElementById("quoteForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const loader = document.getElementById("loader");
+  const priceDisplay = document.getElementById("priceDisplay");
+  const downloadBtn = document.getElementById("downloadPDF");
+
+  loader.style.display = "block";
+  priceDisplay.innerHTML = "";
+  downloadBtn.style.display = "none";
+
+  const fromInput = document.getElementById("from").value.trim();
+  const toInput = document.getElementById("to").value.trim();
+  const houseType = document.getElementById("house-type").value;
+
+  try {
+    // If user didn't pick on map, try forward geocoding typed addresses
+    if (!fromCoords) fromCoords = await forwardGeocode(fromInput);
+    if (!toCoords) toCoords = await forwardGeocode(toInput);
+
+    if (!fromCoords || !toCoords) {
+      throw new Error("Missing coords");
+    }
+
+    const distanceKm = await getDistanceKm(fromCoords, toCoords);
+    const price = calculatePrice(distanceKm, houseType);
+
+    loader.style.display = "none";
+    priceDisplay.innerHTML = `
+      <h2>Estimated Price: KES ${price.toLocaleString()}</h2>
+      <p>Distance: ${distanceKm.toFixed(2)} km</p>
+      <p>House Type: ${houseType}</p>
+    `;
+    downloadBtn.style.display = "inline-block";
+
+    // Store last results for PDF
+    priceDisplay.dataset.price = price;
+    priceDisplay.dataset.distance = distanceKm.toFixed(2);
+    priceDisplay.dataset.house = houseType;
+    priceDisplay.dataset.from = fromInput || (await safePlaceName(fromCoords));
+    priceDisplay.dataset.to = toInput || (await safePlaceName(toCoords));
+  } catch (err) {
+    console.warn(err);
+    loader.style.display = "none";
+    document.getElementById("manualDistanceSection").style.display = "block";
+    alert("Couldn't detect distance automatically. Please enter it manually below.");
+  }
+});
+
+// Helper to get a readable name if inputs were blank
+async function safePlaceName(lngLat) {
+  try {
+    return await reverseGeocode(lngLat);
+  } catch {
+    return `${lngLat[1].toFixed(6)}, ${lngLat[0].toFixed(6)}`;
+  }
+}
+
+// ---- Manual distance fallback ----
+document.getElementById("manualCalcBtn").addEventListener("click", () => {
+  const manualDistance = parseFloat(document.getElementById("manualDistanceInput").value);
+  const houseType = document.getElementById("house-type").value;
+
+  if (isNaN(manualDistance) || manualDistance <= 0) {
+    alert("Please enter a valid distance in km.");
+    return;
   }
 
-  downloadBtn.onclick = () => {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.text(
-      `FelTon Movers Quote\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nFrom: ${from}\nTo: ${to}\nDistance: ${distanceKm} km\nHouse Type: ${houseType}\nEstimated Cost: KSh ${price.toLocaleString()}`.trim(),
-      10, 10
-    );
-    doc.save("FelTon_Moving_Quote.pdf");
-  };
+  const price = calculatePrice(manualDistance, houseType);
 
-  // Booking calendar event link (Google Calendar)
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() + 1);
-  const endDate = new Date(startDate);
-  endDate.setHours(endDate.getHours() + 2);
-  const format = d => d.toISOString().replace(/[-:]|\.\d{3}/g, '').slice(0, 15);
+  const priceDisplay = document.getElementById("priceDisplay");
+  priceDisplay.innerHTML = `
+    <h2>Estimated Price: KES ${price.toLocaleString()}</h2>
+    <p>Distance: ${manualDistance.toFixed(2)} km</p>
+    <p>House Type: ${houseType}</p>
+  `;
+  document.getElementById("downloadPDF").style.display = "inline-block";
 
-  const calendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=FelTon%20Moving%20Booking&dates=${format(startDate)}/${format(endDate)}&details=${encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nFrom: ${from}\nTo: ${to}\nHouse Type: ${houseType}\nQuote: KSh ${price.toLocaleString()}`)}`;
+  priceDisplay.dataset.price = price;
+  priceDisplay.dataset.distance = manualDistance.toFixed(2);
+  priceDisplay.dataset.house = houseType;
+  priceDisplay.dataset.from = document.getElementById("from").value.trim();
+  priceDisplay.dataset.to = document.getElementById("to").value.trim();
+});
 
-  if (!document.getElementById('calendarBtn')) {
-    const calendarBtn = document.createElement('a');
-    calendarBtn.id = 'calendarBtn';
-    calendarBtn.href = calendarLink;
-    calendarBtn.target = '_blank';
-    calendarBtn.innerText = 'Add to Google Calendar';
-    calendarBtn.style.display = 'inline-block';
-    calendarBtn.style.marginTop = '10px';
-    calendarBtn.style.marginLeft = '10px';
-    calendarBtn.style.backgroundColor = '#4285F4';
-    calendarBtn.style.color = 'white';
-    calendarBtn.style.padding = '10px 20px';
-    calendarBtn.style.borderRadius = '5px';
-    calendarBtn.style.textDecoration = 'none';
-    priceDisplay.appendChild(calendarBtn);
+// ---- PDF Download ----
+document.getElementById("downloadPDF").addEventListener("click", () => {
+  const { jsPDF } = window.jspdf || {};
+  if (!jsPDF) {
+    alert("PDF library not loaded.");
+    return;
   }
-} // ========== END JS ==========
+
+  const name = document.getElementById("fullname").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const email = document.getElementById("email").value.trim();
+
+  const priceDisplay = document.getElementById("priceDisplay");
+  const price = priceDisplay.dataset.price || "";
+  const distance = priceDisplay.dataset.distance || "";
+  const house = priceDisplay.dataset.house || "";
+  const fromTxt = priceDisplay.dataset.from || document.getElementById("from").value.trim();
+  const toTxt = priceDisplay.dataset.to || document.getElementById("to").value.trim();
+
+  const doc = new jsPDF();
+  let y = 20;
+
+  doc.setFontSize(18);
+  doc.text("FelTon Movers & Cleaners — Quote", 14, y); y += 10;
+
+  doc.setFontSize(12);
+  doc.text(`Name: ${name}`, 14, y); y += 6;
+  doc.text(`Phone: ${phone}`, 14, y); y += 6;
+  doc.text(`Email: ${email}`, 14, y); y += 10;
+
+  doc.text(`From: ${fromTxt}`, 14, y); y += 6;
+  doc.text(`To: ${toTxt}`, 14, y); y += 6;
+  doc.text(`House Type: ${house}`, 14, y); y += 6;
+  doc.text(`Distance: ${distance} km`, 14, y); y += 10;
+
+  doc.setFontSize(14);
+  doc.text(`Estimated Price: KES ${Number(price).toLocaleString()}`, 14, y); y += 10;
+
+  doc.setFontSize(10);
+  doc.text("Note: This is an estimate. Final price may vary after assessment.", 14, y);
+
+  doc.save("FelTon_Movers_Quote.pdf");
+});
+let message = `Hello FelTon Movers, I got a quote of KSh ${price} for moving a ${houseType} from ${from} to ${to} (${distanceKm} km).`;
+document.getElementById("whatsappShare").href = 
+  `https://wa.me/254111300121?text=${encodeURIComponent(message)}`;
+document.getElementById("whatsappShare").style.display = "inline-block";
