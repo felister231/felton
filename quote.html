@@ -8,6 +8,8 @@
 
   <!-- Mapbox CSS -->
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" rel="stylesheet" />
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
@@ -15,6 +17,9 @@
       width: 100%;
       height: 400px;
       border-radius: 10px;
+    }
+    .geocoder {
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -84,16 +89,19 @@
     </div>
   </div>
 
+  <!-- Modal for Map -->
   <div id="mapModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeMap()">&times;</span>
+      <div id="geocoder" class="geocoder"></div>
       <div id="map"></div>
+      <button type="button" onclick="confirmLocation()">Confirm Location</button>
     </div>
   </div>
 
   <section class="map-instruction">
     <h3>Not Sure Where to Drop Your Location?</h3>
-    <p>Use our interactive map above. Tap and hold to place a marker. We’ll calculate your moving distance automatically!</p>
+    <p>Use our interactive map above. Search or drop a pin on the map. We’ll calculate your moving distance automatically!</p>
   </section>
 
   <section class="cta-panel">
@@ -101,10 +109,10 @@
     <p>Our team is ready to assist. Contact us anytime if you need help or want a custom quote.</p>
     <a href="tel:+254111300121" class="cta-button">Call Us Now</a>
   </section>
+
   <a id="whatsappShare" href="#" target="_blank" style="display:none" class="btn">
-  Share Quote on WhatsApp
-</a>
-</body>
+    Share Quote on WhatsApp
+  </a>
 
   <a href="javascript:history.back()" class="back-arrow">
     <span style="font-size: 1.5rem;">&#8592;</span>
@@ -112,8 +120,7 @@
 
   <!-- Mapbox JS -->
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
   <script src="quote.js"></script>
-  <a href="index.html" class="back-button">
-  <i class="fas fa-arrow-left"></i>
-
+</body>
 </html>
