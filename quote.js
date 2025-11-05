@@ -1,98 +1,111 @@
-// ========== quote.js (Mapbox modal + bracket pricing) ==========
-const MAPBOX_TOKEN = "pk.eyJ1IjoibWFsaXR1IiwiYSI6ImNtZWxkY3gyaDBmbHEybHNlejNqeXI3b3oifQ.Gj6G79AHfkd4jD6FnIohlg";
+let map, activeField, fromMarker, toMarker;
+let fromCoords = null, toCoords = null;
+let directionsService, directionsRenderer;
+let autocomplete;
 
-let map, geocoder, fromMarker, toMarker;
-let fromCoords = null, toCoords = null, activeField = null;
-
-// ---- Open Map Modal ----
+// --- Open Map Modal ---
 window.openMap = function (field) {
   activeField = field;
   const modal = document.getElementById("mapModal");
   modal.style.display = "block";
 
   if (!map) {
-    mapboxgl.accessToken = MAPBOX_TOKEN;
-    map = new mapboxgl.Map({
-      container: "map",
-      style: "mapbox://styles/mapbox/streets-v12",
-      center: [36.817223, -1.286389],
-      zoom: 12
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: -1.286389, lng: 36.817223 },
+      zoom: 12,
     });
 
-    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+    directionsRenderer.setMap(map);
 
-    // Initialize Geocoder
-    geocoder = new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl,
-      countries: "KE",
-      placeholder: "Search location in Kenya...",
-      proximity: { longitude: 37.9062, latitude: -0.0236 }
+    // Use new PlaceAutocompleteElement
+    const input = document.getElementById("pac-input");
+    autocomplete = new google.maps.places.PlaceAutocompleteElement({
+      element: input,
+      fields: ["name", "geometry", "formatted_address"],
+      restrictions: { country: ["KE"] },
+      locationBias: map.getBounds(),
     });
 
-    document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
+    autocomplete.addEventListener("place_changed", () => {
+      const place = autocomplete.getPlace();
+      if (!place.geometry) return;
+      const position = place.geometry.location;
 
-    // Select from search
-    geocoder.on("result", (e) => {
-      const lngLat = e.result.center;
-      placeMarker(lngLat);
-      document.getElementById(activeField).value = e.result.place_name;
-      if (activeField === "from") fromCoords = lngLat;
-      else toCoords = lngLat;
+      placeMarker(position);
+      map.panTo(position);
+      document.getElementById(activeField).value = place.formatted_address;
+
+      if (activeField === "from") fromCoords = { lat: position.lat(), lng: position.lng() };
+      else toCoords = { lat: position.lat(), lng: position.lng() };
       closeMap();
     });
 
-    // Select by clicking map
-    map.on("click", async (e) => {
-      const lngLat = [e.lngLat.lng, e.lngLat.lat];
-      placeMarker(lngLat);
-      const placeName = await reverseGeocode(lngLat);
-      document.getElementById(activeField).value = placeName;
-      if (activeField === "from") fromCoords = lngLat;
-      else toCoords = lngLat;
-      closeMap();
+    // Click on map to select location
+    map.addListener("click", (e) => {
+      placeMarker(e.latLng);
+      reverseGeocode(e.latLng);
     });
   }
 
-  // ✅ Fix: Ensure map displays properly when modal opens
-  setTimeout(() => map.resize(), 300);
+  setTimeout(() => google.maps.event.trigger(map, "resize"), 300);
 };
 
-// ---- Close Map Modal ----
+// --- Close Map Modal ---
 window.closeMap = function () {
   document.getElementById("mapModal").style.display = "none";
 };
 
-// ---- Marker placement ----
-function placeMarker(lngLat) {
+// --- Confirm location (manual close) ---
+window.confirmLocation = function () {
+  closeMap();
+};
+
+// --- Place Marker ---
+function placeMarker(position) {
   if (activeField === "from") {
-    if (fromMarker) fromMarker.remove();
-    fromMarker = new mapboxgl.Marker({ color: "#10b981" }).setLngLat(lngLat).addTo(map);
+    if (fromMarker) fromMarker.setMap(null);
+    fromMarker = new google.maps.Marker({ position, map, label: "A" });
   } else {
-    if (toMarker) toMarker.remove();
-    toMarker = new mapboxgl.Marker({ color: "#ef4444" }).setLngLat(lngLat).addTo(map);
+    if (toMarker) toMarker.setMap(null);
+    toMarker = new google.maps.Marker({ position, map, label: "B" });
   }
 }
 
-// ---- Reverse geocoding ----
-async function reverseGeocode([lng, lat]) {
-  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?limit=1&access_token=${MAPBOX_TOKEN}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  return data?.features?.[0]?.place_name || `${lat}, ${lng}`;
+// --- Reverse Geocode ---
+function reverseGeocode(latlng) {
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ location: latlng }, (results, status) => {
+    if (status === "OK" && results[0]) {
+      document.getElementById(activeField).value = results[0].formatted_address;
+      if (activeField === "from") fromCoords = { lat: latlng.lat(), lng: latlng.lng() };
+      else toCoords = { lat: latlng.lat(), lng: latlng.lng() };
+    }
+  });
 }
 
-// ---- Directions API ----
-async function getDistanceKm(fromLngLat, toLngLat) {
-  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${fromLngLat[0]},${fromLngLat[1]};${toLngLat[0]},${toLngLat[1]}?overview=false&access_token=${MAPBOX_TOKEN}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  const meters = data?.routes?.[0]?.distance;
-  if (typeof meters !== "number") throw new Error("No route found");
-  return meters / 1000;
+// --- Calculate Distance ---
+async function getDistanceKm(fromCoords, toCoords) {
+  return new Promise((resolve, reject) => {
+    const request = {
+      origin: fromCoords,
+      destination: toCoords,
+      travelMode: google.maps.TravelMode.DRIVING,
+    };
+
+    directionsService.route(request, (result, status) => {
+      if (status === "OK") {
+        const meters = result.routes[0].legs[0].distance.value;
+        resolve(meters / 1000);
+      } else {
+        reject("Could not calculate distance: " + status);
+      }
+    });
+  });
 }
 
-// ---- Bracket Pricing ----
+// --- Bracket Pricing ---
 function calculatePrice(distanceKm, houseType) {
   let price = 0;
   if (houseType === "Bedsitter") {
@@ -134,7 +147,7 @@ function calculatePrice(distanceKm, houseType) {
   return price;
 }
 
-// ---- Submit Form ----
+// --- Handle Form Submission ---
 document.getElementById("quoteForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const loader = document.getElementById("loader");
@@ -164,10 +177,9 @@ document.getElementById("quoteForm").addEventListener("submit", async (e) => {
     const message = `Hello FelTon Movers, I got a quote of KSh ${price.toLocaleString()} for moving a ${houseType} from ${fromInput} to ${toInput} (${distanceKm.toFixed(2)} km).`;
     whatsappBtn.href = `https://wa.me/254111300121?text=${encodeURIComponent(message)}`;
     whatsappBtn.style.display = "inline-block";
-
   } catch (err) {
-    console.warn(err);
     loader.style.display = "none";
-    alert("Couldn't detect distance automatically. Please try again or pick again from the map.");
+    alert("Couldn't calculate distance automatically. Please try again.");
+    console.error(err);
   }
 });
