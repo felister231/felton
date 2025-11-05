@@ -10,24 +10,12 @@
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
   <link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" rel="stylesheet" />
 
+  <!-- jsPDF for PDF download -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-  <style>
-    #map {
-      width: 100%;
-      height: 400px;
-      border-radius: 10px;
-    }
-    .geocoder {
-      margin-bottom: 10px;
-    }
-  </style>
 </head>
 <body>
   <nav class="navbar">
-    <div class="logo">
-      <a href="index.html">FelTon</a>
-    </div>
+    <div class="logo"><a href="index.html">FelTon</a></div>
     <div class="menu-toggle" id="menu-toggle">&#9776;</div>
     <ul class="nav-links" id="nav-links">
       <li><a href="index.html">Home</a></li>
@@ -38,18 +26,9 @@
     </ul>
   </nav>
 
-  <div class="hero">
-    <div class="overlay">
-      <div class="hero-content">
-        <h1>FelTon Movers & Cleaners</h1>
-        <p>Reliable. Fast. Affordable.</p>
-        <a href="quote.html" class="btn">Get a Free Quote</a>
-      </div>
-    </div>
-  </div>
-
   <div class="container">
     <h1>FelTon Movers Quote Form</h1>
+
     <form id="quoteForm">
       <input type="text" id="fullname" placeholder="Your Name" required />
       <input type="tel" id="phone" placeholder="Phone Number" required />
@@ -81,46 +60,33 @@
     <div id="priceDisplay"></div>
     <button id="downloadPDF" style="display:none">Download PDF</button>
 
-    <div id="manualDistanceSection" style="display:none; margin-top: 20px;">
+    <div id="manualDistanceSection" style="display:none; margin-top: 12px;">
       <h3>Couldn't detect distance?</h3>
       <p>Enter the distance in kilometers manually:</p>
       <input type="number" id="manualDistanceInput" placeholder="Enter distance in km" min="1" />
       <button id="manualCalcBtn">Calculate Quote Manually</button>
     </div>
+
+    <a id="whatsappShare" href="#" target="_blank" style="display:none" class="btn">Share Quote on WhatsApp</a>
   </div>
 
-  <!-- Modal for Map -->
-  <div id="mapModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeMap()">&times;</span>
-      <div id="geocoder" class="geocoder"></div>
-      <div id="map"></div>
-      <button type="button" onclick="confirmLocation()">Confirm Location</button>
-    </div>
+  <!-- Modal for Map (one modal used for both inputs) -->
+<div id="mapModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeMap()">&times;</span>
+    <h2>Select Location on Map</h2>
+    <div id="geocoder" style="margin-bottom: 10px;"></div>
+    <div id="map" style="width:100%; height:400px;"></div>
+    <button onclick="confirmLocation()">Confirm Location</button>
   </div>
+</div>
 
-  <section class="map-instruction">
-    <h3>Not Sure Where to Drop Your Location?</h3>
-    <p>Use our interactive map above. Search or drop a pin on the map. We’ll calculate your moving distance automatically!</p>
-  </section>
-
-  <section class="cta-panel">
-    <h3>Need Help Booking?</h3>
-    <p>Our team is ready to assist. Contact us anytime if you need help or want a custom quote.</p>
-    <a href="tel:+254111300121" class="cta-button">Call Us Now</a>
-  </section>
-
-  <a id="whatsappShare" href="#" target="_blank" style="display:none" class="btn">
-    Share Quote on WhatsApp
-  </a>
-
-  <a href="javascript:history.back()" class="back-arrow">
-    <span style="font-size: 1.5rem;">&#8592;</span>
-  </a>
 
   <!-- Mapbox JS -->
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+
+  <!-- Your app JS -->
   <script src="quote.js"></script>
 </body>
 </html>
