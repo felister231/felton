@@ -10,11 +10,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
-    /* small override to ensure modal center (keeps your CSS as main) */
     .modal-content { max-width: 800px; width: 95%; }
     #map { width: 100%; height: 400px; }
     #pac-input { width: 100%; box-sizing: border-box; }
-    /* ensure confirm button visible */
     .confirm-btn { margin-top: 10px; background:#007bff; color:#fff; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; }
   </style>
 </head>
@@ -49,7 +47,7 @@
         <button type="button" onclick="openMap('to')">Pick from Map</button>
       </div>
 
-      <select id="house-type" required>
+      <select id="houseType" required>
         <option value="">Select House Type</option>
         <option value="Bedsitter">Bedsitter</option>
         <option value="1 Bedroom">1 Bedroom</option>
@@ -60,11 +58,17 @@
 
       <button type="submit">Calculate Quote</button>
     </form>
-
     <div id="loader" style="display:none">Calculating...</div>
-    <div id="priceDisplay"></div>
-    <button id="downloadPDF" style="display:none">Download PDF</button>
+<div id="priceDisplay"></div>
 
+<!-- Hidden fields for WhatsApp sharing -->
+<p id="distance" style="display:none;"></p>
+<p id="totalCost" style="display:none;"></p>
+
+<button id="downloadPDF" style="display:none">Download PDF</button>
+
+
+   
     <div id="manualDistanceSection" style="display:none; margin-top: 12px;">
       <h3>Couldn't detect distance?</h3>
       <p>Enter the distance in kilometers manually:</p>
@@ -72,22 +76,19 @@
       <button id="manualCalcBtn">Calculate Quote Manually</button>
     </div>
 
-    <a id="whatsappShare" href="#" target="_blank" style="display:none" class="btn">Share Quote on WhatsApp</a>
+    <button onclick="sendQuoteToWhatsApp()" id="whatsappShare" style="display:none;" class="btn">
+      📤 Share Quote on WhatsApp
+    </button>
   </div>
 
-  <!-- Modal for Map -->
+  <!-- Map Modal -->
   <div id="mapModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeMap()">&times;</span>
       <h2>Select Location on Map</h2>
-
-      <!-- Search box inside modal -->
       <input id="pac-input" class="controls" type="text" placeholder="Search location..." />
-
-      <!-- Map -->
       <div id="map"></div>
 
-      <!-- confirm button -->
       <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:8px;">
         <button class="confirm-btn" onclick="confirmLocation()">Confirm Location</button>
         <button class="confirm-btn" style="background:#6c757d" onclick="closeMap()">Cancel</button>
@@ -95,23 +96,71 @@
     </div>
   </div>
 
-  <!-- Google Maps API - IMPORTANT: libraries=places is required -->
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuFIJBoiezeu0jTmz3ljEQe_hZ4K4x2bU&libraries=places"
-    async
-    defer
-  ></script>
+  <!-- Google Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuFIJBoiezeu0jTmz3ljEQe_hZ4K4x2bU&libraries=places" async defer></script>
 
-  <!-- Main JS (replace your quote.js with the below content) -->
-  <script src="quote.js"></script>
-  <form id="quoteForm">
-  <!-- ... your inputs ... -->
 
-  <div id="priceDisplay"></div>
-  <a id="whatsappShare" href="#" target="_blank" style="display:none;" class="btn">
-    Share Quote on WhatsApp
-  </a>
-</form>
+  <!-- WhatsApp Share Function -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const whatsappButton = document.getElementById("whatsappShare");
+
+  whatsappButton.addEventListener("click", () => {
+    const fullname = document.getElementById("fullname")?.value || "Valued Customer";
+    const phone = document.getElementById("phone")?.value || "Not provided";
+    const from = document.getElementById("from")?.value || "Not set";
+    const to = document.getElementById("to")?.value || "Not set";
+    const houseType = document.getElementById("houseType")?.value || "Not selected";
+    const distance = document.getElementById("distance")?.textContent || "Auto-calculated";
+    const totalCost = document.getElementById("totalCost")?.textContent || "Pending";
+
+    const today = new Date().toLocaleDateString("en-KE", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+
+    const companyName = "FelTon Movers 🚛";
+    const tagline = "Swift • Secure • Stress-Free Moves 💪";
+    const logoUrl = "https://feltonmovers.co.ke/images/logo.png";
+    const stampUrl = "https://feltonmovers.co.ke/images/stamp.png";
+    const phoneNumber = "+254111300121";
+
+    const message = `
+*${companyName}*
+${tagline}
+
+🧾 *Official Moving Quote*
+─────────────────────────────
+👤 *Customer:* ${fullname}
+📅 *Date:* ${today}
+📍 *From:* ${from}
+🏁 *To:* ${to}
+🏠 *House Type:* ${houseType}
+📏 *Distance:* ${distance}
+💰 *Estimated Cost:* ${totalCost}
+─────────────────────────────
+✅ *Note:* Includes professional movers, transport & handling.
+
+📞 *Contact Us*
+${phoneNumber}
+📧 info@feltonmovers.co.ke
+🌐 www.feltonmovers.co.ke
+
+─────────────────────────────
+*FelTon Movers — We Move, You Relax.* 💫
+
+🏷️ *Official Branding:*
+Logo: ${logoUrl}
+Stamp: ${stampUrl}
+`;
+
+    const encoded = encodeURIComponent(message);
+    window.open(`https://wa.me/?text=${encoded}`, "_blank");
+  });
+});
+</script>
+<script src="quote.js"></script>
 
 </body>
 </html>
