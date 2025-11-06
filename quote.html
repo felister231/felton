@@ -8,6 +8,15 @@
 
   <!-- jsPDF for PDF download -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    /* small override to ensure modal center (keeps your CSS as main) */
+    .modal-content { max-width: 800px; width: 95%; }
+    #map { width: 100%; height: 400px; }
+    #pac-input { width: 100%; box-sizing: border-box; }
+    /* ensure confirm button visible */
+    .confirm-btn { margin-top: 10px; background:#007bff; color:#fff; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; }
+  </style>
 </head>
 <body>
   <nav class="navbar">
@@ -31,12 +40,12 @@
       <input type="email" id="email" placeholder="Email Address" required />
 
       <div class="location-group">
-        <input type="text" id="from" placeholder="Moving From" required />
+        <input type="text" id="from" placeholder="Moving From" required readonly />
         <button type="button" onclick="openMap('from')">Pick from Map</button>
       </div>
 
       <div class="location-group">
-        <input type="text" id="to" placeholder="Moving To" required />
+        <input type="text" id="to" placeholder="Moving To" required readonly />
         <button type="button" onclick="openMap('to')">Pick from Map</button>
       </div>
 
@@ -71,20 +80,38 @@
     <div class="modal-content">
       <span class="close" onclick="closeMap()">&times;</span>
       <h2>Select Location on Map</h2>
+
+      <!-- Search box inside modal -->
       <input id="pac-input" class="controls" type="text" placeholder="Search location..." />
-      <div id="map" style="width:100%; height:400px;"></div>
-      <button onclick="confirmLocation()">Confirm Location</button>
+
+      <!-- Map -->
+      <div id="map"></div>
+
+      <!-- confirm button -->
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:8px;">
+        <button class="confirm-btn" onclick="confirmLocation()">Confirm Location</button>
+        <button class="confirm-btn" style="background:#6c757d" onclick="closeMap()">Cancel</button>
+      </div>
     </div>
   </div>
 
-  <!-- Google Maps API -->
+  <!-- Google Maps API - IMPORTANT: libraries=places is required -->
   <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuFIJBoiezeu0jTmz3ljEQe_hZ4K4x2bU"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuFIJBoiezeu0jTmz3ljEQe_hZ4K4x2bU&libraries=places"
     async
     defer
   ></script>
 
-  <!-- Main JS -->
+  <!-- Main JS (replace your quote.js with the below content) -->
   <script src="quote.js"></script>
+  <form id="quoteForm">
+  <!-- ... your inputs ... -->
+
+  <div id="priceDisplay"></div>
+  <a id="whatsappShare" href="#" target="_blank" style="display:none;" class="btn">
+    Share Quote on WhatsApp
+  </a>
+</form>
+
 </body>
 </html>
